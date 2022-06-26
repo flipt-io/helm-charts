@@ -2,9 +2,10 @@ name: Release Charts
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: [Sync Readme]
+    types:
+      - completed
 
 jobs:
   release:

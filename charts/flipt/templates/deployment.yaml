@@ -35,15 +35,20 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.flipt.httpPort }}
+              containerPort: {{ coalesce .Values.flipt.httpPort .Values.containerPorts.http }}
               protocol: TCP
             - name: grpc
-              containerPort: {{ .Values.flipt.grpcPort }}
+              containerPort: {{ coalesce .Values.flipt.grpcPort .Values.containerPorts.grpc }}
               protocol: TCP
           volumeMounts:
-            - name: config-volume
+            - name: flipt-config
               mountPath: /etc/flipt/config.yml
               readOnly: true
+            - name: flipt-data
+              mountPath: /var/opt/flipt
+            {{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}
+            {{- end }}
           livenessProbe:
             httpGet:
               path: /
@@ -55,9 +60,16 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
-        - name: config-volume
+        - name: flipt-config
           configMap:
             name: {{ include "flipt.fullname" . }}
+        - name: flipt-data
+        {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ default (include "flipt.fullname" .) .Values.persistence.existingClaim }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

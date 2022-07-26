@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: markphelps/flipt
+  repository: flipt/flipt
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -78,9 +78,42 @@ tolerations: []
 
 affinity: {}
 
-# Flipt deployment settings
+## Container ports
+##
+containerPorts:
+  ## http is the Flipt HTTP container port
+  http: 8080
+  ## grpc Flipt GRPC container port
+  grpc: 9000
+
+## Persistence Parameters
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  ## enabled enables persistence using Persistent Volume Claims
+  enabled: false
+  ## annotations are additional custom annotations for the PVC
+  annotations: {}
+  ## existingClaim sets the name of an existing PVC to use for persistence
+  existingClaim: ""
+  ## subPath is the name of a volume's sub path to mount for persistence
+  subPath: ""
+  ## accessModes [array] Persistent Volume access modes
+  accessModes:
+    - ReadWriteOnce
+  ## storageClass sets Persistent Volume storage class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
+  ##
+  storageClass: ""
+  ## size is the Persistent Volume size
+  size: 5Gi
+
 flipt:
-  # Port to expose the http service on
+  # httpPort is the Flipt HTTP container port
+  # @deprecated use containerPorts.http instead
   httpPort: 8080
-  # Port to expose the grpc service on
+  # grpcPort is the Flipt GRPC container port
+  # @deprecated use containerPorts.grpc instead
   grpcPort: 9000

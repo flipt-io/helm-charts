@@ -2,6 +2,8 @@
 
 <!-- Keep full URL links to repo files because this README syncs from main to gh-pages.  -->
 
+![Latest Version](https://img.shields.io/github/v/release/flipt-io/helm-charts?label=version&style=flat-square)
+
 These charts are still a work in progress.
 
 Please [create an issue](https://github.com/flipt-io/helm-charts/issues/new) or submit a pull request for any issues or missing features.
@@ -18,6 +20,18 @@ helm repo add flipt https://helm.flipt.io
 ```
 
 You can then run `helm search repo flipt` to see the charts.
+
+### Installing
+
+```console
+helm install flipt flipt/flipt
+```
+
+### Upgrading
+
+```console
+helm upgrade flipt flipt/flipt
+```
 
 ## Contributing
 

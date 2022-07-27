@@ -2,7 +2,8 @@
 
 <!-- Keep full URL links to repo files because this README syncs from main to gh-pages.  -->
 
-![Latest Version](https://img.shields.io/github/v/release/flipt-io/helm-charts?label=version&style=flat-square)
+![Chart Version](https://img.shields.io/github/v/release/flipt-io/helm-charts?label=chart%20version)
+![Flipt Version](https://img.shields.io/github/v/release/flipt-io/flipt?color=green&label=flipt%20version)
 
 These charts are still a work in progress.
 

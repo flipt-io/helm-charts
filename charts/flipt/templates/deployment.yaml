@@ -42,8 +42,9 @@ spec:
               protocol: TCP
           volumeMounts:
             - name: flipt-config
-              mountPath: /etc/flipt/config.yml
+              mountPath: /etc/flipt/config/default.yml
               readOnly: true
+              subPath: default.yml
             - name: flipt-data
               mountPath: /var/opt/flipt
             {{- if .Values.persistence.subPath }}

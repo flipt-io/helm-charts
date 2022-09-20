@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "flipt.labels" . | nindent 4 }}
 data:
-  config.yml: |
+  default.yml: |
     log:
       level: WARN
 

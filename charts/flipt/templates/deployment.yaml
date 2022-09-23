@@ -40,6 +40,10 @@ spec:
             - name: grpc
               containerPort: {{ coalesce .Values.flipt.grpcPort .Values.containerPorts.grpc }}
               protocol: TCP
+          env:
+            {{- if .Values.flipt.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.flipt.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
           volumeMounts:
             - name: flipt-config
               mountPath: /etc/flipt/config/default.yml

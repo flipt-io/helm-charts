@@ -34,6 +34,16 @@ helm install flipt flipt/flipt
 helm upgrade flipt flipt/flipt
 ```
 
+### Configuration
+
+Flipt is configured using either a configuration file or via environment variables. See the [Flipt documentation](https://flipt.io/docs/configuration) for more information.
+
+You can configure this chart using a [ConfigMap](https://kubernetes.io/docs/concepts/configuration/configmap/) named `flipt-config` which is mounted as a volume available to the pods at `/etc/flipt/config/default.yaml`.
+
+As of version `0.11.0` of this chart, you can also override the default config values with environment variables via the `flipt.extraEnvVars` field in your `values.yaml` file.
+
+Note the values must be still be named as `FLIPT_<CONFIG_KEY>` per the [documentation](https://flipt.io/docs/configuration#environment-variables).
+
 ## Contributing
 
 The source code of all [Flipt](https://flipt.io/) [Helm](https://helm.sh) charts can be found on Github: <https://github.com/flipt-io/helm-charts/>

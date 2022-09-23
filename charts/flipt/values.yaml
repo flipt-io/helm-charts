@@ -117,7 +117,7 @@ flipt:
   # grpcPort is the Flipt GRPC container port
   # @deprecated use containerPorts.grpc instead
   grpcPort: 9000
-  # extraEnvVars is a list of extra environment variables to set
+  # extraEnvVars is a list of extra environment variables to set e.g.
+  # - name: FLIPT_LOG_LEVEL
+  #   value: debug
   extraEnvVars: []
-    # - name: FLIPT_LOG_LEVEL
-    #   value: debug

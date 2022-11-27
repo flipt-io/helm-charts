@@ -2,9 +2,10 @@ name: Release Charts
 
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - "*"
+  workflow_run:
+    workflows: ["release-please"]
+    types:
+      - completed
 
 permissions:
   contents: write

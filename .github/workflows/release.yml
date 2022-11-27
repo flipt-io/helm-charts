@@ -3,13 +3,14 @@ name: Release Charts
 on:
   workflow_dispatch:
   push:
-    branches:
-      - "main"
+    tags:
+      - "*"
+
+permissions:
+  contents: write
 
 jobs:
   release:
-    permissions:
-      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

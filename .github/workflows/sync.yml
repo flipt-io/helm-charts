@@ -8,10 +8,11 @@ on:
     paths:
       - "README.md"
 
+permissions:
+  contents: write
+
 jobs:
   run:
-    permissions:
-      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

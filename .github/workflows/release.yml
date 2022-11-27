@@ -6,10 +6,11 @@ on:
     branches:
       - "main"
 
+permissions:
+  contents: write
+
 jobs:
   release:
-    permissions:
-      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

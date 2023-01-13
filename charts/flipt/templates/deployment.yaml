@@ -41,10 +41,14 @@ spec:
               containerPort: {{ coalesce .Values.flipt.grpcPort .Values.containerPorts.grpc }}
               protocol: TCP
           env:
+            - name: FLIPT_META_STATE_DIRECTORY
+              value: /home/flipt/.config/flipt
             {{- if .Values.flipt.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.flipt.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           volumeMounts:
+            - name: flipt-local-state
+              mountPath: /home/flipt/.config/flipt
             - name: flipt-config
               mountPath: /etc/flipt/config/default.yml
               readOnly: true
@@ -67,6 +71,8 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
+        - name: flipt-local-state
+          emptyDir: {}
         - name: flipt-config
           configMap:
             name: {{ include "flipt.fullname" . }}

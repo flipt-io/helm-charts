@@ -26,7 +26,7 @@ jobs:
         run: |
           tag="${{ steps.fetch_tag.outputs.tag }}"
           # set current app version
-          yq e ".appVersion = \"${tag}\"" charts/flipt/Chart.yaml
+          yq e ".appVersion = \"${tag}\"" -i charts/flipt/Chart.yaml
           # bump current chart MINOR version
           yq e '.version' charts/flipt/Chart.yaml | awk -F. '{ print $1,$2+1,$3 }' OFS=. | xargs -I{} yq e '.version = "{}"' -i charts/flipt/Chart.yaml
 

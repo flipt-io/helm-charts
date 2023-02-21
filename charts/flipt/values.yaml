@@ -80,6 +80,14 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 
+## Container ports
+##
+containerPorts:
+  ## http is the Flipt HTTP container port
+  http: 8080
+  ## grpc Flipt GRPC container port
+  grpc: 9000
+
 ## Persistence Parameters
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
@@ -103,14 +111,6 @@ persistence:
   storageClass: ""
   ## size is the Persistent Volume size
   size: 5Gi
-
-## Container ports
-##
-containerPorts:
-  ## http is the Flipt HTTP container port
-  http: 8080
-  ## grpc Flipt GRPC container port
-  grpc: 9000
 
 flipt:
   # httpPort is the Flipt HTTP container port

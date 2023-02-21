@@ -40,12 +40,15 @@ service:
   type: ClusterIP
   httpPort: 8080
   grpcPort: 9000
+  annotations: {}
+    # prometheus.io/scrape: "true"
+    # prometheus.io/path: "/metrics"
+    # prometheus.io/port: "8080"
 
 ingress:
   enabled: false
   className: ""
-  annotations:
-    {}
+  annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
@@ -58,8 +61,7 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources:
-  {}
+resources: {}
   # limits:
   #   cpu: 100m
   #   memory: 128Mi
@@ -70,23 +72,13 @@ resources:
 autoscaling:
   enabled: false
   minReplicas: 1
-  maxReplicas: 100
+  maxReplicas: 5
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
 nodeSelector: {}
-
 tolerations: []
-
 affinity: {}
-
-## Container ports
-##
-containerPorts:
-  ## http is the Flipt HTTP container port
-  http: 8080
-  ## grpc Flipt GRPC container port
-  grpc: 9000
 
 ## Persistence Parameters
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -113,13 +105,49 @@ persistence:
   size: 5Gi
 
 flipt:
-  # httpPort is the Flipt HTTP container port
-  # @deprecated use containerPorts.http instead
-  httpPort: 8080
-  # grpcPort is the Flipt GRPC container port
-  # @deprecated use containerPorts.grpc instead
-  grpcPort: 9000
-  # extraEnvVars is a list of extra environment variables to set e.g.
-  # - name: FLIPT_LOG_LEVEL
-  #   value: debug
-  extraEnvVars: []
+  log:
+    level: INFO
+    encoding: console
+    grpc_level: ERROR
+
+  ui:
+    enabled: true
+
+  cors:
+    enabled: true
+    allowed_origins: "*"
+
+  cache:
+    enabled: false
+    backend: memory
+    ttl: 60s
+    redis:
+      host: localhost
+      port: 6379
+    memory:
+      eviction_interval: 5m # Evict Expired Items Every 5m
+
+  server:
+    protocol: http
+    host: 0.0.0.0
+    https_port: 443
+    http_port: 8080
+    grpc_port: 9000
+
+  db:
+    url: file:/var/opt/flipt/flipt.db
+    max_idle_conn: 2
+    max_open_conn: 0 # unlimited
+    conn_max_lifetime: 0 # unlimited
+
+  tracing:
+    enabled: false
+    exporter: jaeger
+    jaeger:
+      host: localhost
+      port: 6831
+
+# extraEnvVars is a list of extra environment variables to set e.g.
+# - name: FLIPT_LOG_LEVEL
+#   value: debug
+extraEnvVars: []

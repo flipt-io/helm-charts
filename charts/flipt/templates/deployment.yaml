@@ -4,6 +4,8 @@ metadata:
   name: {{ include "flipt.fullname" . }}
   labels:
     {{- include "flipt.labels" . | nindent 4 }}
+  annotations:
+    checksum/config: {{ join "," .Values.flipt | sha256sum }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -35,16 +37,16 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ coalesce .Values.flipt.httpPort .Values.containerPorts.http }}
+              containerPort: {{ .Values.flipt.server.http_port }}
               protocol: TCP
             - name: grpc
-              containerPort: {{ coalesce .Values.flipt.grpcPort .Values.containerPorts.grpc }}
+              containerPort: {{ .Values.flipt.server.grpc_port }}
               protocol: TCP
           env:
             - name: FLIPT_META_STATE_DIRECTORY
               value: /home/flipt/.config/flipt
-            {{- if .Values.flipt.extraEnvVars }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.flipt.extraEnvVars "context" $) | nindent 12 }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           volumeMounts:
             - name: flipt-local-state

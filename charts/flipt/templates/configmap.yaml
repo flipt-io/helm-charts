@@ -6,4 +6,4 @@ metadata:
     {{- include "flipt.labels" . | nindent 4 }}
 data:
   default.yml: |
-    {{ toYaml .Values.flipt | nindent 4 }}
+    {{ toYaml .Values.flipt.config | nindent 4 }}

@@ -37,10 +37,10 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.flipt.server.http_port }}
+              containerPort: {{ coalesce .Values.flipt.config.server.http_port .Values.flipt.httpPort .Values.containerPorts.http }}
               protocol: TCP
             - name: grpc
-              containerPort: {{ .Values.flipt.server.grpc_port }}
+              containerPort: {{ coalesce .Values.flipt.config.server.grpc_port .Values.flipt.grpcPort .Values.containerPorts.grpc }}
               protocol: TCP
           env:
             - name: FLIPT_META_STATE_DIRECTORY

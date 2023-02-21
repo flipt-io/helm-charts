@@ -72,7 +72,7 @@ resources: {}
 autoscaling:
   enabled: false
   minReplicas: 1
-  maxReplicas: 5
+  maxReplicas: 100
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
@@ -104,50 +104,64 @@ persistence:
   ## size is the Persistent Volume size
   size: 5Gi
 
+## Container ports
+##
+containerPorts:
+  ## http is the Flipt HTTP container port
+  http: 8080
+  ## grpc Flipt GRPC container port
+  grpc: 9000
+
 flipt:
-  log:
-    level: INFO
-    encoding: console
-    grpc_level: ERROR
+  # httpPort is the Flipt HTTP container port
+  # @deprecated use containerPorts.http instead
+  httpPort: 8080
+  # grpcPort is the Flipt GRPC container port
+  # @deprecated use containerPorts.grpc instead
+  grpcPort: 9000
+  # extraEnvVars is a list of extra environment variables to set e.g.
+  # - name: FLIPT_LOG_LEVEL
+  #   value: debug
+  extraEnvVars: []
+  config:
+    log:
+      level: INFO
+      encoding: console
+      grpc_level: ERROR
 
-  ui:
-    enabled: true
+    ui:
+      enabled: true
 
-  cors:
-    enabled: true
-    allowed_origins: "*"
+    cors:
+      enabled: true
+      allowed_origins: "*"
 
-  cache:
-    enabled: false
-    backend: memory
-    ttl: 60s
-    redis:
-      host: localhost
-      port: 6379
-    memory:
-      eviction_interval: 5m # Evict Expired Items Every 5m
+    cache:
+      enabled: false
+      backend: memory
+      ttl: 60s
+      redis:
+        host: localhost
+        port: 6379
+      memory:
+        eviction_interval: 5m # Evict Expired Items Every 5m
 
-  server:
-    protocol: http
-    host: 0.0.0.0
-    https_port: 443
-    http_port: 8080
-    grpc_port: 9000
+    server:
+      protocol: http
+      host: 0.0.0.0
+      https_port: 443
+      http_port: 8080
+      grpc_port: 9000
 
-  db:
-    url: file:/var/opt/flipt/flipt.db
-    max_idle_conn: 2
-    max_open_conn: 0 # unlimited
-    conn_max_lifetime: 0 # unlimited
+    db:
+      url: file:/var/opt/flipt/flipt.db
+      max_idle_conn: 2
+      max_open_conn: 0 # unlimited
+      conn_max_lifetime: 0 # unlimited
 
-  tracing:
-    enabled: false
-    exporter: jaeger
-    jaeger:
-      host: localhost
-      port: 6831
-
-# extraEnvVars is a list of extra environment variables to set e.g.
-# - name: FLIPT_LOG_LEVEL
-#   value: debug
-extraEnvVars: []
+    tracing:
+      enabled: false
+      exporter: jaeger
+      jaeger:
+        host: localhost
+        port: 6831

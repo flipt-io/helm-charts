@@ -3,8 +3,8 @@ name: flipt
 home: https://flipt.io
 description: Flipt is an open source, self-hosted feature flag solution.
 type: application
-version: 0.23.0
-appVersion: v1.18.2
+version: 0.24.0
+appVersion: v1.19.0
 maintainers:
   - name: Flipt
     url: https://github.com/flipt-io/helm-charts

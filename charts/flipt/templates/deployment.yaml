@@ -4,8 +4,6 @@ metadata:
   name: {{ include "flipt.fullname" . }}
   labels:
     {{- include "flipt.labels" . | nindent 4 }}
-  annotations:
-    checksum/config: {{ join "," .Values.flipt | sha256sum }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -15,10 +13,7 @@ spec:
       {{- include "flipt.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+      annotations: {{- include "common.classes.podAnnotations" . | nindent 8 }}
       labels:
         {{- include "flipt.selectorLabels" . | nindent 8 }}
     spec:

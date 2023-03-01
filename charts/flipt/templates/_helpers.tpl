@@ -93,3 +93,13 @@ Return  the proper Storage Class
   {{- end -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Pod annotations 
+*/}}
+{{- define "common.classes.podAnnotations" }}
+  {{- if .Values.podAnnotations -}}
+    {{- tpl (toYaml .Values.podAnnotations) . | nindent 0 -}}
+  {{- end -}}
+  {{- printf "checksum/config: %v" (join "," .Values.flipt | sha256sum) -}}
+{{- end -}}

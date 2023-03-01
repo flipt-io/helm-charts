@@ -133,7 +133,7 @@ flipt:
       enabled: true
 
     cors:
-      enabled: true
+      enabled: false
       allowed_origins: "*"
 
     cache:

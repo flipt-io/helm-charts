@@ -169,7 +169,7 @@ flipt:
 metrics:
   serviceMonitor:
     # -- If enabled, ServiceMonitor resources for Prometheus Operator are created
-    enabled: false 
+    enabled: false
     # -- Port where to scrape metrics from
     port: 8080
     # -- Namespace selector for ServiceMonitor resources

@@ -6,11 +6,4 @@ metadata:
     {{- include "flipt.labels" . | nindent 4 }}
 data:
   default.yml: |
-    log:
-      level: WARN
-
-    server:
-      protocol: http
-      host: 0.0.0.0
-      http_port: 8080
-      grpc_port: 9000
+    {{ toYaml .Values.flipt.config | nindent 4 }}

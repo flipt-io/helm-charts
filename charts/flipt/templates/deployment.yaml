@@ -13,10 +13,7 @@ spec:
       {{- include "flipt.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+      annotations: {{- include "common.classes.podAnnotations" . | nindent 8 }}
       labels:
         {{- include "flipt.selectorLabels" . | nindent 8 }}
     spec:
@@ -35,10 +32,10 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ coalesce .Values.flipt.httpPort .Values.containerPorts.http }}
+              containerPort: {{ coalesce ((.Values.flipt.config).server).http_port .Values.flipt.httpPort .Values.containerPorts.http }}
               protocol: TCP
             - name: grpc
-              containerPort: {{ coalesce .Values.flipt.grpcPort .Values.containerPorts.grpc }}
+              containerPort: {{ coalesce ((.Values.flipt.config).server).grpc_port .Values.flipt.grpcPort .Values.containerPorts.grpc }}
               protocol: TCP
           env:
             - name: FLIPT_META_STATE_DIRECTORY

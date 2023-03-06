@@ -171,7 +171,7 @@ metrics:
     # -- If enabled, ServiceMonitor resources for Prometheus Operator are created
     enabled: false
     # -- Port where to scrape metrics from
-    port: 8080
+    port: http 
     # -- Namespace selector for ServiceMonitor resources
     namespaceSelector: {}
     # -- ServiceMonitor annotations

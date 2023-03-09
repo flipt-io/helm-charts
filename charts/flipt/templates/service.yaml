@@ -6,6 +6,9 @@ metadata:
   name: {{ include "flipt.fullname" . }}
   labels:
     {{- include "flipt.labels" . | nindent 4 }}
+    {{- with .Values.service.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   {{- if (or (eq .Values.service.type "ClusterIP") (empty .Values.service.type)) }}
   type: ClusterIP

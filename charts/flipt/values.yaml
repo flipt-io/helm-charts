@@ -36,14 +36,19 @@ securityContext:
   runAsNonRoot: true
   runAsUser: 100
 
+
+## Expose the flipt service to be accessed from outside the cluster (LoadBalancer service).
+## or access it from within the cluster (ClusterIP service). Set the service type and the port to serve it.
+## ref: http://kubernetes.io/docs/user-guide/services/
+##
 service:
+  enabled: true
   type: ClusterIP
   httpPort: 8080
   grpcPort: 9000
+  ## Service annotations. Can be templated.
   annotations: {}
-    # prometheus.io/scrape: "true"
-    # prometheus.io/path: "/metrics"
-    # prometheus.io/port: "8080"
+  labels: {}
 
 ingress:
   enabled: false

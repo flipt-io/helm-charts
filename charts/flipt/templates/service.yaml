@@ -1,3 +1,5 @@
+{{- if .Values.service.enabled }}
+{{- $root := . }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -5,6 +7,27 @@ metadata:
   labels:
     {{- include "flipt.labels" . | nindent 4 }}
 spec:
+  {{- if (or (eq .Values.service.type "ClusterIP") (empty .Values.service.type)) }}
+  type: ClusterIP
+  {{- with .Values.service.clusterIP }}
+  clusterIP: {{ . }}
+  {{- end }}
+  {{- else if eq .Values.service.type "LoadBalancer" }}
+  type: {{ .Values.service.type }}
+  {{- with .Values.service.loadBalancerIP }}
+  loadBalancerIP: {{ . }}
+  {{- end }}
+  {{- with .Values.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- else }}
+  type: {{ .Values.service.type }}
+  {{- end }}
+  {{- with .Values.service.externalIPs }}
+  externalIPs:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   ports:
     - port: {{ .Values.service.httpPort }}
       targetPort: http
@@ -16,3 +39,4 @@ spec:
       name: grpc
   selector:
     {{- include "flipt.selectorLabels" . | nindent 4 }}
+{{- end }}

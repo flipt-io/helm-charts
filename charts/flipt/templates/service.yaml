@@ -1,4 +1,4 @@
-{{- if (or (empty .Values.service.enabled) .Values.service.enabled))}}
+{{- if (or (empty .Values.service.enabled) .Values.service.enabled)}}
 {{- $root := . }}
 apiVersion: v1
 kind: Service

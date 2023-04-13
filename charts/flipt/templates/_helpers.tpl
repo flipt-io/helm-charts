@@ -103,3 +103,19 @@ Pod annotations
   {{- end -}}
   {{- printf "checksum/config: %v" (join "," .Values.flipt | sha256sum) | nindent 0 -}}
 {{- end -}}
+
+{{/* Return the target Kubernetes version */}}
+{{- define "flipt.tools.kubeVersion" -}}
+{{- default .Capabilities.KubeVersion.Version .Values.kubeVersionOverride }}
+{{- end }}
+
+{{/* Return the appropriate apiVersion for autoscaling */}}
+{{- define "flipt.apiVersion.autoscaling" -}}
+{{- if (.Values.apiVersionOverrides).autoscaling -}}
+{{- print .Values.apiVersionOverrides.autoscaling -}}
+{{- else if semverCompare "<1.23-0" (include "flipt.tools.kubeVersion" .) -}}
+{{- print "autoscaling/v2beta1" -}}
+{{- else -}}
+{{- print "autoscaling/v2" -}}
+{{- end -}}
+{{- end -}}

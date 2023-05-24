@@ -2,6 +2,20 @@ apiVersion: v1
 entries:
   flipt:
   - apiVersion: v2
+    appVersion: v1.22.1
+    created: "2023-05-24T15:30:16.556338487Z"
+    description: Flipt is an open source, self-hosted feature flag solution.
+    digest: b4e64cb3b028ae7bec17983ed04b815446b91b12434572ad1cbbe6288f2f74ed
+    home: https://flipt.io
+    maintainers:
+    - name: Flipt
+      url: https://github.com/flipt-io/helm-charts
+    name: flipt
+    type: application
+    urls:
+    - https://github.com/flipt-io/helm-charts/releases/download/flipt-0.32.0/flipt-0.32.0.tgz
+    version: 0.32.0
+  - apiVersion: v2
     appVersion: v1.22.0
     created: "2023-05-23T16:19:43.576488723Z"
     description: Flipt is an open source, self-hosted feature flag solution.
@@ -513,4 +527,4 @@ entries:
     urls:
     - https://github.com/flipt-io/helm-charts/releases/download/flipt-0.2.0/flipt-0.2.0.tgz
     version: 0.2.0
-generated: "2023-05-23T16:19:43.577143571Z"
+generated: "2023-05-24T15:30:16.556611285Z"

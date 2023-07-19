@@ -175,6 +175,14 @@ flipt:
         host: localhost
         port: 6831
 
+migration:
+  # If enabled will run the migration script over your db before rolling out
+  # a new deployment. This will run in a helm hook so will get cleaned up on
+  # success.
+  enabled: false
+  # How long to let the job run for kube will terminate it.
+  deadLine: 600 # sec
+
 metrics:
   serviceMonitor:
     # -- If enabled, ServiceMonitor resources for Prometheus Operator are created

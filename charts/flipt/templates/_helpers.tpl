@@ -24,6 +24,14 @@ If release name contains chart name it will be used as a full name.
 {{- end }}
 
 {{/*
+Create a fully qualified name for the migration job
+*/}}
+{{- define "flipt.migration_name" -}}
+{{- include "flipt.fullname" . | trunc 53 | trimSuffix "-" }}-migration
+{{- end }}
+
+
+{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "flipt.chart" -}}
@@ -95,7 +103,7 @@ Return  the proper Storage Class
 {{- end -}}
 
 {{/*
-Pod annotations 
+Pod annotations
 */}}
 {{- define "common.classes.podAnnotations" -}}
   {{- if .Values.podAnnotations -}}

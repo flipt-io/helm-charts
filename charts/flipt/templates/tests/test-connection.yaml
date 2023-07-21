@@ -9,7 +9,7 @@ metadata:
 spec:
   containers:
     - name: wget
-      image: busybox
+      image: busybox:{{ (.Values.test).tag | default "latest" }}
       command: ['wget']
       args: ['{{ include "flipt.fullname" . }}:{{ .Values.service.httpPort }}']
   restartPolicy: Never

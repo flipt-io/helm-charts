@@ -19,6 +19,10 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
+test:
+  # Can pin the version of busybox to a specific version
+  # tag: '1.36.1'
+
 podAnnotations: {}
 
 podSecurityContext:

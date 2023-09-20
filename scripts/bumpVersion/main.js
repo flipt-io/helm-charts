@@ -2,25 +2,26 @@ const fs = require("fs");
 const yaml = require("js-yaml");
 const semver = require("semver");
 
-// get path to YAML file from command line
+// Usage: node scripts/bumpVersion/main.js path/to/Chart.yaml $TAG
 
+// get path to YAML file from command line
 const filePath = process.argv[2];
 
 // get tag from command line
 const inputTag = process.argv[3];
 
-// Read YAML file
+// read YAML file
 const fileContents = fs.readFileSync(filePath, "utf8");
 const data = yaml.load(fileContents);
 
-// Get current appVersion
+// get current appVersion
 const currentVersion = data.appVersion;
 
-// Compare versions
+// compare versions
 if (semver.valid(inputTag) && semver.valid(currentVersion)) {
   const diffType = semver.diff(currentVersion, inputTag);
 
-  // Determine if it's a minor or patch bump
+  // determine if it's a minor or patch bump
   if (diffType === "minor" || diffType === "patch") {
     console.log(`The appVersion was bumped with a ${diffType} change.`);
   } else {
@@ -30,13 +31,13 @@ if (semver.valid(inputTag) && semver.valid(currentVersion)) {
     return 1;
   }
 
-  // Update appVersion
+  // update appVersion
   data.appVersion = inputTag;
-  // Update chart version using same strategy
+  // update chart version using same strategy
   version = data.version;
   data.version = semver.inc(version, diffType);
 
-  // Write updated YAML back to file
+  // write updated YAML back to file
   const newYaml = yaml.dump(data);
   fs.writeFileSync(filePath, newYaml, "utf8");
 

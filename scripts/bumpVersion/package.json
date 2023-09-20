@@ -1,0 +1,16 @@
+{
+  "name": "bumpversion",
+  "version": "0.0.1",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "bump": "node main.js"
+  },
+  "keywords": [],
+  "author": "Flipt Devs <dev@flipt.io>",
+  "license": "MIT",
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "semver": "^7.5.4"
+  }
+}

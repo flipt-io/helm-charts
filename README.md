@@ -9,6 +9,17 @@ These charts are still a work in progress.
 
 Please [create an issue](https://github.com/flipt-io/helm-charts/issues/new) or submit a pull request for any issues or missing features.
 
+## Versioning
+
+This project uses [Semantic Versioning](https://semver.org/).
+
+Our versioning strategy is based on the version of application that is packaged in the chart:
+
+- Each minor version bump of the application will also increase the minor version of the chart.
+- Each patch version bump of the application will also increase the patch version of the chart.
+
+**Note:** Some changes to the chart will not affect the application version. For example, if there is a bugfix or patch change to the chart that does not affect the application, the chart version will be incremented, but the application version will remain the same.
+
 ## Usage
 
 [Helm](https://helm.sh) must be installed to use the charts.

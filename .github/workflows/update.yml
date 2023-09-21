@@ -13,6 +13,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install node
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: "14"
+
       - name: Fetch Latest Flipt Release Tag
         id: fetch_tag
         env:
@@ -20,15 +25,15 @@ jobs:
         run: |
           tag=$(gh release view -R flipt-io/flipt --json tagName | jq -r .tagName)
           echo "tag=${tag}" >> $GITHUB_OUTPUT
-     
+
       - name: Update Chart Versions
         id: update_chart
         run: |
           tag="${{ steps.fetch_tag.outputs.tag }}"
-          # set current app version
-          yq e ".appVersion = \"${tag}\"" -i charts/flipt/Chart.yaml
-          # bump current chart MINOR version
-          yq e '.version' charts/flipt/Chart.yaml | awk -F. '{ print $1,$2+1,$3 }' OFS=. | xargs -I{} yq e '.version = "{}"' -i charts/flipt/Chart.yaml
+          pushd scripts/bumpVersion
+          npm install
+          npm run bump ../../charts/flipt/Chart.yaml "${tag}"
+          popd
 
       - name: Generate token
         id: generate_token
@@ -53,4 +58,3 @@ jobs:
           git push origin "update/${tag}"
           gh pr create --title "feat: update Flipt version to release ${tag}" \
             --body "Updating chart to Flipt release [${tag}](https://github.com/flipt-io/flipt/releases/tag/${tag})."
-

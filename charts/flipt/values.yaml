@@ -142,23 +142,6 @@ flipt:
       encoding: console
       grpc_level: ERROR
 
-    ui:
-      enabled: true
-
-    cors:
-      enabled: false
-      allowed_origins: "*"
-
-    cache:
-      enabled: false
-      backend: memory
-      ttl: 60s
-      redis:
-        host: localhost
-        port: 6379
-      memory:
-        eviction_interval: 5m # Evict Expired Items Every 5m
-
     server:
       protocol: http
       host: 0.0.0.0
@@ -171,13 +154,6 @@ flipt:
       max_idle_conn: 2
       max_open_conn: 0 # unlimited
       conn_max_lifetime: 0 # unlimited
-
-    tracing:
-      enabled: false
-      exporter: jaeger
-      jaeger:
-        host: localhost
-        port: 6831
 
 migration:
   # If enabled will run the migration script over your db before rolling out

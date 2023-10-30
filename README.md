@@ -5,8 +5,6 @@
 ![Chart Version](https://img.shields.io/github/v/release/flipt-io/helm-charts?label=chart%20version)
 ![Flipt Version](https://img.shields.io/github/v/release/flipt-io/flipt?color=green&label=flipt%20version)
 
-These charts are still a work in progress.
-
 Please [create an issue](https://github.com/flipt-io/helm-charts/issues/new) or submit a pull request for any issues or missing features.
 
 ## Versioning

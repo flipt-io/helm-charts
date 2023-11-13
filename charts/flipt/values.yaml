@@ -189,3 +189,15 @@ metrics:
     scheme: http
     # -- ServiceMonitor will use these tlsConfig settings to make the health check requests
     tlsConfig: null
+
+# extraVolumeMounts is a list of extra volumes to mount to the flipt container
+# - name: flipt-git-ssh-key
+#   mountPath: /etc/flipt/ssh.key
+#   subPath: ssh.key
+extraVolumeMounts: []
+
+# extraVolumes is a list of extra volumes to mount to the pod
+# - name: flipt-git-ssh-key
+#   secret:
+#     secretName: flit-git-ssh-key-secret
+extraVolumes: []

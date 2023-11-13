@@ -66,6 +66,7 @@ spec:
             - name: flipt-ssh-known-hosts
               mountPath: /etc/flipt/ssh_known_hosts
               readOnly: true
+              subPath: ssh_known_hosts
             {{- end }}
           livenessProbe:
             httpGet:

@@ -43,6 +43,10 @@ spec:
             {{- if .Values.flipt.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.flipt.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+            {{- if (.Values.ssh).knownHosts }}
+            - name: SSH_KNOWN_HOSTS
+              value: /etc/flipt/known_hosts
+            {{- end }}
           volumeMounts:
             - name: flipt-local-state
               mountPath: /home/flipt/.config/flipt
@@ -55,7 +59,13 @@ spec:
             {{- if .Values.persistence.subPath }}
               subPath: {{ .Values.persistence.subPath }}
             {{- end }}
-            {{ if .Values.extraVolumeMounts }}
+            {{- if (.Values.ssh).knownHosts }}
+            - name: flipt-ssh-known-hosts
+              mountPath: /etc/flipt/ssh_known_hosts
+              readOnly: true
+              subPath: ssh_known_hosts
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
           livenessProbe:
@@ -82,6 +92,11 @@ spec:
             claimName: {{ default (include "flipt.fullname" .) .Values.persistence.existingClaim }}
         {{- else }}
           emptyDir: {}
+        {{- end }}
+        {{- if (.Values.ssh).knownHosts }}
+        - name: flipt-ssh-known-hosts
+          configMap:
+            name: {{ include "flipt.fullname" . }}-ssh-known-hosts
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}

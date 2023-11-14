@@ -1,0 +1,12 @@
+{{- if (.Values.ssh).knownHosts }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "flipt.fullname" . }}-ssh-known-hosts
+  labels:
+    {{- include "flipt.labels" . | nindent 4 }}
+data:
+  ssh_known_hosts: |
+    {{- .Values.ssh.knownHosts | nindent 4 }}
+{{- end }}

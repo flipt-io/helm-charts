@@ -59,14 +59,14 @@ spec:
             {{- if .Values.persistence.subPath }}
               subPath: {{ .Values.persistence.subPath }}
             {{- end }}
-            {{ if .Values.extraVolumeMounts }}
-            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
-            {{- end }}
             {{- if (.Values.ssh).knownHosts }}
             - name: flipt-ssh-known-hosts
               mountPath: /etc/flipt/ssh_known_hosts
               readOnly: true
               subPath: ssh_known_hosts
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
           livenessProbe:
             httpGet:
@@ -93,13 +93,13 @@ spec:
         {{- else }}
           emptyDir: {}
         {{- end }}
-        {{- if .Values.extraVolumes }}
-        {{- toYaml .Values.extraVolumes | nindent 8 }}
-        {{- end }}
         {{- if (.Values.ssh).knownHosts }}
         - name: flipt-ssh-known-hosts
           configMap:
             name: {{ include "flipt.fullname" . }}-ssh-known-hosts
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
         {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

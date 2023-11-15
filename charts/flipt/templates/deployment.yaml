@@ -45,7 +45,7 @@ spec:
             {{- end }}
             {{- if (.Values.ssh).knownHosts }}
             - name: SSH_KNOWN_HOSTS
-              value: /etc/flipt/known_hosts
+              value: /etc/flipt/ssh_known_hosts
             {{- end }}
           volumeMounts:
             - name: flipt-local-state

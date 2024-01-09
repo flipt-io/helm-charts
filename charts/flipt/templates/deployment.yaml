@@ -8,6 +8,8 @@ spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
+  minReadySeconds: {{ .Values.minReadySeconds }}
+
   selector:
     matchLabels:
       {{- include "flipt.selectorLabels" . | nindent 6 }}

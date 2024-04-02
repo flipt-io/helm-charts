@@ -138,6 +138,7 @@ flipt:
   # - name: FLIPT_LOG_LEVEL
   #   value: debug
   extraEnvVars: []
+  envFrom: []
   config:
     log:
       level: INFO

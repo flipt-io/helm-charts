@@ -49,6 +49,10 @@ spec:
             - name: SSH_KNOWN_HOSTS
               value: /etc/flipt/ssh_known_hosts
             {{- end }}
+          {{- if .Values.flipt.envFrom }}
+          envFrom:
+            {{- toYaml .Values.flipt.envFrom | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: flipt-local-state
               mountPath: /home/flipt/.config/flipt

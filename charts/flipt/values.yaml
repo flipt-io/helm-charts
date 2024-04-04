@@ -40,6 +40,8 @@ securityContext:
   readOnlyRootFilesystem: true
   runAsNonRoot: true
   runAsUser: 100
+  seccompProfile:
+    type: "RuntimeDefault"
 
 ## Expose the flipt service to be accessed from outside the cluster (LoadBalancer service).
 ## or access it from within the cluster (ClusterIP service). Set the service type and the port to serve it.

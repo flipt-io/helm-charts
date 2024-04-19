@@ -41,6 +41,10 @@ spec:
             {{- if .Values.flipt.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.flipt.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+          {{- if .Values.flipt.envFrom }}
+          envFrom:
+            {{- toYaml .Values.flipt.envFrom | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: flipt-config
               mountPath: /etc/flipt/config/default.yml

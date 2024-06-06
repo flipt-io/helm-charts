@@ -25,6 +25,7 @@ test:
   # tag: '1.36.1'
 
 podAnnotations: {}
+podLabels: {}
 
 podSecurityContext:
   runAsUser: 100

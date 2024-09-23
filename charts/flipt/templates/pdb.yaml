@@ -4,6 +4,7 @@ apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
   name: {{ template "flipt.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels: {{- include "flipt.labels" . | nindent 4 }}
 spec:
   maxUnavailable: {{ default "25%" .Values.pdb.maxUnavailable }} 

@@ -3,6 +3,7 @@ apiVersion: {{ include "flipt.apiVersion.autoscaling" . }}
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "flipt.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "flipt.labels" . | nindent 4 }}
 spec:

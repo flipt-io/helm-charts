@@ -3,6 +3,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ include "flipt.migration_name" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "flipt.labels" . | nindent 4 }}
   annotations:

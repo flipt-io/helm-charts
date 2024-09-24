@@ -4,7 +4,7 @@ kind: ServiceMonitor
 metadata:
   name: {{ template "flipt.fullname" . }}
   {{- with .Values.metrics.serviceMonitor.namespace }}
-  namespace: {{ . }}
+  namespace: {{ .Release.Namespace }}
   {{- end }}
   labels:
     {{- include "flipt.labels" . | nindent 4 }}

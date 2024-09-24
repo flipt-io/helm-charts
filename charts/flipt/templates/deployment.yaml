@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "flipt.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "flipt.labels" . | nindent 4 }}
 spec:
@@ -35,6 +36,11 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/flipt"]
+          {{- if .Values.flipt.args }}
+          args:
+          {{- toYaml .Values.flipt.args | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ coalesce ((.Values.flipt.config).server).http_port .Values.flipt.httpPort .Values.containerPorts.http }}

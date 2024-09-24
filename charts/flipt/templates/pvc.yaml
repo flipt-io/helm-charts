@@ -3,6 +3,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: {{ include "flipt.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "flipt.labels" . | nindent 4 }}
   {{- if or .Values.persistence.annotations .Values.commonAnnotations }}

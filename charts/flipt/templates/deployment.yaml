@@ -128,3 +128,7 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.strategy }}
+      strategy:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

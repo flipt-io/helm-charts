@@ -97,6 +97,7 @@ pdb:
 nodeSelector: {}
 tolerations: []
 affinity: {}
+strategy: {}
 
 ## Container ports
 ##

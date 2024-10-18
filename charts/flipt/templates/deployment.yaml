@@ -10,6 +10,10 @@ spec:
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   minReadySeconds: {{ .Values.minReadySeconds }}
+  {{- with .Values.strategy }}
+  strategy:
+    {{- toYaml . | nindent 8 }}
+  {{- end }}
 
   selector:
     matchLabels:
@@ -126,9 +130,5 @@ spec:
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.strategy }}
-      strategy:
         {{- toYaml . | nindent 8 }}
       {{- end }}

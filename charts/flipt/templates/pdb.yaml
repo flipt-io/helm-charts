@@ -10,5 +10,5 @@ spec:
   maxUnavailable: {{ default "25%" .Values.pdb.maxUnavailable }} 
   selector:
     matchLabels:
-      {{- include "flipt.labels" . | nindent 6 }}
+      {{- include "flipt.selectorLabels" . | nindent 6 }}
 {{- end }}

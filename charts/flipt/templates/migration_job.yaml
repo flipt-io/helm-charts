@@ -51,6 +51,8 @@ spec:
               mountPath: /etc/flipt/config/default.yml
               readOnly: true
               subPath: default.yml
+            - name: flipt-data
+              mountPath: /var/opt/flipt
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
@@ -59,6 +61,13 @@ spec:
         - name: flipt-config
           configMap:
             name: {{ include "flipt.fullname" . }}
+        - name: flipt-data
+        {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ default (include "flipt.fullname" .) .Values.persistence.existingClaim }}
+        {{- else }}
+          emptyDir: { }
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

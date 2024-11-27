@@ -55,6 +55,8 @@ spec:
           env:
             - name: FLIPT_META_STATE_DIRECTORY
               value: /home/flipt/.config/flipt
+            - name: FLIPT_META_CHECK_FOR_UPDATES
+              value: "0"
             {{- if .Values.flipt.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.flipt.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

@@ -64,6 +64,7 @@ service:
   enabled: true
   type: ClusterIP
   httpPort: 8080
+  httpsPort: 443
   grpcPort: 9000
   ## Service annotations. Can be templated.
   annotations: {}
@@ -116,6 +117,8 @@ strategy: {}
 containerPorts:
   ## http is the Flipt HTTP container port
   http: 8080
+  ## https is the Flipt HTTPS container port
+  https: 443
   ## grpc Flipt GRPC container port
   grpc: 9000
 

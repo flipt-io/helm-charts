@@ -18,6 +18,7 @@ spec:
       interval: {{ . }}
       {{- end }}
       path: /metrics
+      honorLabels: {{ .Values.metrics.serviceMonitor.honorLabels }}
       {{- with .Values.metrics.serviceMonitor.relabelings }}
       relabelings:
         {{- toYaml . | nindent 8 }}

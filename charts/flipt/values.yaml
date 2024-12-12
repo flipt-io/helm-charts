@@ -207,6 +207,9 @@ metrics:
     # -- ServiceMonitor relabel configs to apply to samples before scraping
     # https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     relabelings: []
+    # -- What to do when flipt metrics labels are conflicting with Prometheus server-side labels.
+    # true means keep label values from flipt.
+    honorLabels: false
     # -- ServiceMonitor will use http by default, but you can pick https as well
     scheme: http
     # -- ServiceMonitor will use these tlsConfig settings to make the health check requests

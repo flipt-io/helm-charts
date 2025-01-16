@@ -112,6 +112,16 @@ Pod annotations
   {{- printf "checksum/config: %v" (join "," .Values.flipt | sha256sum) | nindent 0 -}}
 {{- end -}}
 
+{{/*
+Deployment annotations
+*/}}
+{{- define "common.classes.deploymentAnnotations" -}}
+  {{- if .Values.deploymentAnnotations -}}
+    {{- tpl (toYaml .Values.deploymentAnnotations) . | nindent 0 -}}
+  {{- end -}}
+  {{- printf "checksum/config: %v" (join "," .Values.flipt | sha256sum) | nindent 0 -}}
+{{- end -}}
+
 {{/* Return the target Kubernetes version */}}
 {{- define "flipt.tools.kubeVersion" -}}
 {{- default .Capabilities.KubeVersion.Version .Values.kubeVersionOverride }}

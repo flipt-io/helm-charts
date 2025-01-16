@@ -3,8 +3,12 @@ kind: Deployment
 metadata:
   name: {{ include "flipt.fullname" . }}
   namespace: {{ .Release.Namespace }}
+  annotations: {{- include "common.classes.podAnnotations" . | nindent 4 }}
   labels:
     {{- include "flipt.labels" . | nindent 4 }}
+    {{- if .Values.deploymentLabels }}
+    {{- toYaml .Values.deploymentLabels | nindent 4 }}
+    {{- end }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}

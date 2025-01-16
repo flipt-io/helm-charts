@@ -27,6 +27,9 @@ test:
 podAnnotations: {}
 podLabels: {}
 
+deploymentAnnotations: {}
+deploymentLabels: {}
+
 podSecurityContext:
   runAsUser: 100
   runAsGroup: 1000

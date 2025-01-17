@@ -16,23 +16,23 @@ jobs:
       - name: Install node
         uses: actions/setup-node@v4.1.0
         with:
-          node-version: "14"
+          node-version: "18"
 
       - name: Fetch Latest Flipt Release Tag
         id: fetch_tag
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          tag=$(gh release view -R flipt-io/flipt --json tagName | jq -r .tagName)
-          echo "tag=${tag}" >> $GITHUB_OUTPUT
+          TAG=$(gh release view -R flipt-io/flipt --json tagName | jq -r .tagName)
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
 
       - name: Update Chart Versions
         id: update_chart
         run: |
-          tag="${{ steps.fetch_tag.outputs.tag }}"
+          TAG="${{ steps.fetch_tag.outputs.tag }}"
           pushd scripts/bumpVersion
           npm install
-          npm run bump ../../charts/flipt/Chart.yaml "${tag}"
+          npm run bump ../../charts/flipt/Chart.yaml "${TAG}"
           popd
 
       - name: Generate token
@@ -51,11 +51,12 @@ jobs:
           GIT_COMMITTER_EMAIL: dev@flipt.io
           GH_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
-          tag="${{ steps.fetch_tag.outputs.tag }}"
-          git checkout -b "update/${tag}/${{ github.run_id }}"
+          TAG="${{ steps.fetch_tag.outputs.tag }}"
+          BRANCH_NAME="update/${TAG}-$(date +%s)"
+          git checkout -b "${BRANCH_NAME}"
           git add charts/flipt/Chart.yaml
-          git commit -m "feat: update Flipt version to release ${tag}"
-          git push origin "update/${tag}/${{ github.run_id }}"
-          gh pr create --title "feat: update Flipt version to release ${tag}" \
-            --head "update/${tag}/${{ github.run_id }}" \
-            --body "Updating chart to Flipt release [${tag}](https://github.com/flipt-io/flipt/releases/tag/${tag})."
+          git commit -m "feat: update Flipt version to release ${TAG}"
+          git push origin "${BRANCH_NAME}"
+          gh pr create --title "feat: update Flipt version to release ${TAG}" \
+            --head "${BRANCH_NAME}" \
+            --body "Updating chart to Flipt release [${TAG}](https://github.com/flipt-io/flipt/releases/tag/${TAG})."

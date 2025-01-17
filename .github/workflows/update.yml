@@ -52,9 +52,10 @@ jobs:
           GH_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
           tag="${{ steps.fetch_tag.outputs.tag }}"
-          git checkout -b "update/${tag}"
+          git checkout -b "update/${tag}/${{ github.run_id }}"
           git add charts/flipt/Chart.yaml
           git commit -m "feat: update Flipt version to release ${tag}"
-          git push origin "update/${tag}"
+          git push origin "update/${tag}/${{ github.run_id }}"
           gh pr create --title "feat: update Flipt version to release ${tag}" \
+            --head "update/${tag}/${{ github.run_id }}" \
             --body "Updating chart to Flipt release [${tag}](https://github.com/flipt-io/flipt/releases/tag/${tag})."

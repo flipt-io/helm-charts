@@ -235,3 +235,7 @@ ssh:
   # knownHosts is the contents of a custom known hosts file
   # for use with SSH authentication and the Git backend for Flipt
   knownHosts: ""
+
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []

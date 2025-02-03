@@ -76,6 +76,7 @@ service:
 ingress:
   enabled: false
   className: ""
+  servicePort: 443
   annotations:
     {}
     # kubernetes.io/ingress.class: nginx

@@ -76,7 +76,6 @@ service:
 ingress:
   enabled: false
   className: ""
-  servicePort: null
   annotations:
     {}
     # kubernetes.io/ingress.class: nginx
@@ -86,6 +85,9 @@ ingress:
       paths:
         - path: /
           pathType: ImplementationSpecific
+          backend:
+            servicePort: http
+            serviceName: ""
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:

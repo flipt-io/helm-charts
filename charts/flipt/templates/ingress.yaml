@@ -1,6 +1,5 @@
 {{- if .Values.ingress.enabled -}}
 {{- $fullName := include "flipt.fullname" . -}}
-{{- $svcPort := default .Values.service.httpPort .Values.service.httpsPort -}}
 {{- if and .Values.ingress.className (not (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion)) }}
   {{- if not (hasKey .Values.ingress.annotations "kubernetes.io/ingress.class") }}
   {{- $_ := set .Values.ingress.annotations "kubernetes.io/ingress.class" .Values.ingress.className}}
@@ -50,12 +49,12 @@ spec:
             backend:
               {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
               service:
-                name: {{ $fullName }}
+                name: {{ default $fullName .backend.serviceName }}
                 port:
-                  number: {{ $svcPort }}
+                  name: {{  .backend.servicePort }}
               {{- else }}
-              serviceName: {{ $fullName }}
-              servicePort: {{ $svcPort }}
+              serviceName: {{ default $fullName .backend.serviceName }}
+              servicePort: {{ .backend.servicePort }}
               {{- end }}
           {{- end }}
     {{- end }}

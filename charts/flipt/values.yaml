@@ -85,6 +85,11 @@ ingress:
       paths:
         - path: /
           pathType: ImplementationSpecific
+          # backend configuration is optional
+          # if not specified, defaults to:
+          # backend:
+          #   servicePort: http
+          #   serviceName: <chart-fullname>
           backend:
             servicePort: http
             serviceName: ""

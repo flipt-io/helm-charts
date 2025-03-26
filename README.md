@@ -59,6 +59,48 @@ You can also override the default config values with environment variables via t
 
 Note the values must be still be named as `FLIPT_<CONFIG_KEY>` per the [documentation](https://flipt.io/docs/configuration#environment-variables).
 
+### Ingress Configuration
+
+The chart supports ingress configuration with automatic generation of the required configuration. To enable the ingress controller, set `ingress.enabled=true` in your values file:
+
+```yaml
+flipt:
+  ingress:
+    enabled: true
+    className: nginx  # optional: only if you're using a specific ingress class
+    hosts:
+      - host: flipt.example.com
+        paths:
+          - path: /
+            pathType: Prefix
+```
+
+For more advanced configurations, such as TLS and custom annotations:
+
+```yaml
+flipt:
+  ingress:
+    enabled: true
+    className: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    hosts:
+      - host: flipt.example.com
+        paths:
+          - path: /
+            pathType: Prefix
+            # backend configuration is optional and will default to:
+            # backend:
+            #   servicePort: http
+            #   serviceName: <release-name>-flipt
+    tls:
+      - hosts:
+          - flipt.example.com
+        secretName: flipt-tls
+```
+
+The backend service configuration is optional. If not specified, the chart will automatically use the correct service name and port.
+
 ### YAML
 
 You can also configure this chart using YAML. See the [values.yaml](charts/flipt/values.yaml) file for the default values under `flipt.config`.

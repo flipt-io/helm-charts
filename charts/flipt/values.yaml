@@ -122,6 +122,7 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 strategy: {}
+topologySpreadConstraints: []
 
 ## Container ports
 ##

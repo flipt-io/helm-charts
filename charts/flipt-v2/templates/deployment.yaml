@@ -1,0 +1,141 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "flipt-v2.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  annotations: {{- include "common.classes.deploymentAnnotations" . | nindent 4 }}
+  labels:
+    {{- include "flipt-v2.labels" . | nindent 4 }}
+    {{- if .Values.deploymentLabels }}
+    {{- toYaml .Values.deploymentLabels | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  minReadySeconds: {{ .Values.minReadySeconds }}
+  {{- with .Values.strategy }}
+  strategy:
+    {{- toYaml . | nindent 8 }}
+  {{- end }}
+
+  selector:
+    matchLabels:
+      {{- include "flipt-v2.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations: {{- include "common.classes.podAnnotations" . | nindent 8 }}
+      labels:
+        {{- include "flipt-v2.selectorLabels" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{- toYaml .Values.podLabels | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "flipt-v2.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: {{ .Values.image.command }}
+          {{- if .Values.flipt.args }}
+          args:
+          {{- toYaml .Values.flipt.args | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ coalesce ((.Values.flipt.config).server).http_port .Values.flipt.httpPort .Values.containerPorts.http }}
+              protocol: TCP
+            - name: https
+              containerPort: {{ coalesce ((.Values.flipt.config).server).https_port .Values.containerPorts.https }}
+              protocol: TCP
+            - name: grpc
+              containerPort: {{ coalesce ((.Values.flipt.config).server).grpc_port .Values.flipt.grpcPort .Values.containerPorts.grpc }}
+              protocol: TCP
+          env:
+            - name: FLIPT_META_STATE_DIRECTORY
+              value: /home/flipt/.config/flipt
+            - name: FLIPT_META_CHECK_FOR_UPDATES
+              value: "0"
+            {{- if .Values.flipt.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.flipt.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if (.Values.ssh).knownHosts }}
+            - name: SSH_KNOWN_HOSTS
+              value: /etc/flipt/ssh_known_hosts
+            {{- end }}
+          {{- if .Values.flipt.envFrom }}
+          envFrom:
+            {{- toYaml .Values.flipt.envFrom | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: flipt-local-state
+              mountPath: /home/flipt/.config/flipt
+            - name: flipt-config
+              mountPath: /etc/flipt/config/default.yml
+              readOnly: true
+              subPath: default.yml
+            - name: flipt-data
+              mountPath: /var/opt/flipt
+            {{- if .Values.persistence.subPath }}
+              subPath: {{ .Values.persistence.subPath }}
+            {{- end }}
+            {{- if (.Values.ssh).knownHosts }}
+            - name: flipt-ssh-known-hosts
+              mountPath: /etc/flipt/ssh_known_hosts
+              readOnly: true
+              subPath: ssh_known_hosts
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- end }}
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: flipt-local-state
+          emptyDir: {}
+        - name: flipt-config
+          configMap:
+            name: {{ include "flipt-v2.fullname" . }}
+        - name: flipt-data
+        {{- if .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ default (include "flipt-v2.fullname" .) .Values.persistence.existingClaim }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
+        {{- if (.Values.ssh).knownHosts }}
+        - name: flipt-ssh-known-hosts
+          configMap:
+            name: {{ include "flipt-v2.fullname" . }}-ssh-known-hosts
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

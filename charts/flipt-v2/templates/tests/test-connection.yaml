@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "flipt-v2.fullname" . }}-test-connection"
+  labels:
+    {{- include "flipt-v2.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox:{{ (.Values.test).tag | default "latest" }}
+      command: ['wget']
+      args: ['{{ include "flipt-v2.fullname" . }}:{{ .Values.service.httpPort }}']
+  restartPolicy: Never

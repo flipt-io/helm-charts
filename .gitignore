@@ -1,3 +1,6 @@
 ct_previous*
 .envrc
 node_modules
+
+# Claude Code instructions file
+CLAUDE.md

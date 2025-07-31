@@ -1,0 +1,324 @@
+replicaCount: 1
+minReadySeconds: 0
+
+image:
+  repository: docker.flipt.io/flipt/flipt
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+  command: ["/flipt"]
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+test:
+  # Can pin the version of busybox to a specific version
+  # tag: '1.36.1'
+
+podAnnotations: {}
+podLabels: {}
+
+deploymentAnnotations: {}
+deploymentLabels: {}
+
+podSecurityContext:
+  runAsUser: 100
+  runAsGroup: 1000
+  fsGroup: 1000
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  privileged: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 100
+  seccompProfile:
+    type: "RuntimeDefault"
+
+readinessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 3
+
+livenessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 3
+
+## Expose the flipt service to be accessed from outside the cluster (LoadBalancer service).
+## or access it from within the cluster (ClusterIP service). Set the service type and the port to serve it.
+## ref: http://kubernetes.io/docs/user-guide/services/
+##
+service:
+  enabled: true
+  type: ClusterIP
+  httpPort: 8080
+  httpsPort: 443
+  grpcPort: 9000
+  ## Service annotations. Can be templated.
+  annotations: {}
+  labels: {}
+
+ingress:
+  enabled: false
+  className: ""
+  annotations:
+    {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: flipt.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+          # backend configuration is optional
+          # if not specified, defaults to:
+          # backend:
+          #   servicePort: http
+          #   serviceName: <chart-fullname>
+          backend:
+            servicePort: http
+            serviceName: ""
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources:
+  {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+pdb:
+  enabled: false
+  maxUnavailable: 25%
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+strategy: {}
+topologySpreadConstraints: []
+
+## Container ports
+##
+containerPorts:
+  ## http is the Flipt HTTP container port
+  http: 8080
+  ## https is the Flipt HTTPS container port
+  https: 443
+  ## grpc Flipt GRPC container port
+  grpc: 9000
+
+## Persistence Parameters
+## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+##
+persistence:
+  ## enabled enables persistence using Persistent Volume Claims
+  enabled: false
+  ## annotations are additional custom annotations for the PVC
+  annotations: {}
+  ## existingClaim sets the name of an existing PVC to use for persistence
+  existingClaim: ""
+  ## subPath is the name of a volume's sub path to mount for persistence
+  subPath: ""
+  ## accessModes [array] Persistent Volume access modes
+  accessModes:
+    - ReadWriteOnce
+  ## storageClass sets Persistent Volume storage class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
+  ##
+  storageClass: ""
+  ## size is the Persistent Volume size
+  size: 5Gi
+
+flipt:
+  # httpPort is the Flipt HTTP container port
+  # @deprecated use containerPorts.http instead
+  httpPort: 8080
+  # grpcPort is the Flipt GRPC container port
+  # @deprecated use containerPorts.grpc instead
+  grpcPort: 9000
+  args: []
+  # extraEnvVars is a list of extra environment variables to set e.g.
+  # Environment variables MUST have FLIPT_ prefix for v2
+  # - name: FLIPT_LOG_LEVEL
+  #   value: debug
+  extraEnvVars: []
+  envFrom: []
+  
+  # Flipt v2 Configuration
+  config:
+    log:
+      level: INFO
+      encoding: console
+      grpc_level: ERROR
+
+    server:
+      protocol: http
+      host: 0.0.0.0
+      https_port: 443
+      http_port: 8080
+      grpc_port: 9000
+
+    # Git-native storage configuration (v2 feature)
+    storage:
+      type: local
+      local:
+        path: /var/opt/flipt
+
+    # Multi-environment support (v2 feature)
+    environments:
+      default:
+        name: "Default"
+        description: "Default environment"
+        storage:
+          type: local
+          local:
+            path: /var/opt/flipt/default
+
+    # Authentication configuration (v2 enhanced)
+    authentication:
+      required: false
+      session:
+        domain: ""
+        secure: false
+        http_only: true
+        same_site: "Lax"
+        csrf:
+          key: ""
+      methods:
+        token:
+          enabled: true
+          cleanup:
+            interval: 1h
+            grace_period: 30m
+        oidc:
+          enabled: false
+          # providers:
+          #   google:
+          #     issuer_url: "https://accounts.google.com"
+          #     client_id: ""
+          #     client_secret: ""
+          #     redirect_address: ""
+          #     scopes: ["openid", "email", "profile"]
+
+    # Authorization configuration (v2 feature)
+    authorization:
+      required: false
+      backend: "local"
+      local:
+        policy:
+          default: "allow"
+
+    # License configuration (v2 Pro features)
+    license:
+      key: ""
+      file: ""
+
+    # Git synchronization (v2 feature)
+    git:
+      # repository: "https://github.com/your-org/flipt-config.git"
+      # ref: "main"
+      # path: ""
+      # polling_interval: "30s"
+      authentication:
+        # basic:
+        #   username: ""
+        #   password: ""
+        # token:
+        #   access_token: ""
+        # ssh:
+        #   private_key_path: ""
+        #   password: ""
+        #   insecure_ignore_host_key: false
+
+    # Commit signing (v2 Pro feature)
+    commit_signing:
+      enabled: false
+      # gpg:
+      #   private_key_path: ""
+      #   password: ""
+
+migration:
+  # Migration is less relevant for v2 git-native approach but kept for compatibility
+  enabled: false
+  deadLine: 600 # sec
+
+metrics:
+  serviceMonitor:
+    # -- If enabled, ServiceMonitor resources for Prometheus Operator are created
+    enabled: false
+    # -- Port where to scrape metrics from
+    port: http
+    # -- Namespace selector for ServiceMonitor resources
+    namespaceSelector: {}
+    # -- ServiceMonitor annotations
+    annotations: {}
+    # -- Additional ServiceMonitor labels
+    labels: {}
+    # -- ServiceMonitor scrape interval
+    interval: 15s
+    # -- ServiceMonitor scrape timeout in Go duration format (e.g. 15s)
+    scrapeTimeout: null
+    # -- ServiceMonitor relabel configs to apply to samples before scraping
+    relabelings: []
+    # -- What to do when flipt metrics labels are conflicting with Prometheus server-side labels.
+    honorLabels: false
+    # -- ServiceMonitor will use http by default, but you can pick https as well
+    scheme: http
+    # -- ServiceMonitor will use these tlsConfig settings to make the health check requests
+    tlsConfig: null
+
+# extraVolumeMounts is a list of extra volumes to mount to the flipt container
+# - name: flipt-git-ssh-key
+#   mountPath: /etc/flipt/ssh.key
+#   subPath: ssh.key
+# - name: flipt-config-git
+#   mountPath: /var/opt/flipt
+extraVolumeMounts: []
+
+# extraVolumes is a list of extra volumes to mount to the pod
+# - name: flipt-git-ssh-key
+#   secret:
+#     secretName: flipt-git-ssh-key-secret
+# - name: flipt-config-git
+#   emptyDir: {}
+extraVolumes: []
+
+# ssh contains some SSH specific configuration parameters
+ssh:
+  # knownHosts is the contents of a custom known hosts file
+  # for use with SSH authentication and the Git backend for Flipt
+  knownHosts: ""
+
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []

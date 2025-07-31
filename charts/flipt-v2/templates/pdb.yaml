@@ -1,0 +1,14 @@
+{{- if (.Values.pdb).enabled }}
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "flipt-v2.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "flipt-v2.labels" . | nindent 4 }}
+spec:
+  maxUnavailable: {{ default "25%" .Values.pdb.maxUnavailable }} 
+  selector:
+    matchLabels:
+      {{- include "flipt-v2.selectorLabels" . | nindent 6 }}
+{{- end }}

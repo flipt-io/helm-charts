@@ -45,9 +45,14 @@ flipt:
       level: DEBUG
 
     # Example: Configure Git synchronization
-    git:
-      repository: "https://github.com/your-org/flipt-config.git"
-      ref: "main"
+    storage:
+      production:
+        remote: "https://github.com/your-org/flipt-config.git"
+        branch: "main"
+        poll_interval: "30s"
+        credentials: "github"
+        backend:
+          type: memory
 ```
 
 ### Configuration via Environment Variables
@@ -59,7 +64,7 @@ flipt:
   extraEnvVars:
     - name: FLIPT_LOG_LEVEL
       value: "DEBUG"
-    - name: FLIPT_GIT_REPOSITORY
+    - name: FLIPT_STORAGE_PRODUCTION_REMOTE
       value: "https://github.com/your-org/flipt-config.git"
 ```
 
@@ -99,7 +104,7 @@ flipt:
 
 - v2 can import v1 flag data from Git repositories
 - Environment configuration moved from UI to server config
-- See [migration guide](https://docs.flipt.io/v2/guides/migration/) for detailed instructions
+- See [migration guide](https://docs.flipt.io/v2/guides/migration) for detailed instructions
 
 ## Examples
 
@@ -132,9 +137,14 @@ flipt:
       level: INFO
 
     # Set up Git synchronization
-    git:
-      repository: "https://github.com/company/flipt-config.git"
-      ref: "main"
+    storage:
+      production:
+        remote: "https://github.com/company/flipt-config.git"
+        branch: "main"
+        poll_interval: "30s"
+        credentials: "github"
+        backend:
+          type: memory
 
     # Enable authentication (see docs for full options)
     authentication:

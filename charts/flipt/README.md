@@ -33,7 +33,7 @@ helm install my-flipt flipt/flipt -f values.yaml
 
 Flipt is configured using either a configuration file or via environment variables.
 
-See the [Flipt documentation](https://flipt.io/docs/configuration) for more information.
+See the [Flipt documentation](https://docs.flipt.io/configuration) for more information.
 
 ### ConfigMap
 
@@ -43,7 +43,7 @@ You can configure this chart using a [ConfigMap](https://kubernetes.io/docs/conc
 
 You can also override the default config values with environment variables via the `flipt.extraEnvVars` field in your `values.yaml` file.
 
-Note the values must be still be named as `FLIPT_<CONFIG_KEY>` per the [documentation](https://flipt.io/docs/configuration#environment-variables).
+Note the values must be still be named as `FLIPT_<CONFIG_KEY>` per the [documentation](https://docs.flipt.io/configuration#environment-variables).
 
 ### Ingress Configuration
 
@@ -104,7 +104,7 @@ You can also configure this chart using YAML. See the [values.yaml](https://gith
 | `ingress.enabled`     | bool   | `false`                         | Enable ingress controller resource                                       |
 | `persistence.enabled` | bool   | `false`                         | Enable persistent storage                                                |
 | `autoscaling.enabled` | bool   | `false`                         | Enable horizontal pod autoscaling                                        |
-| `flipt.config`        | object | `{}`                            | Flipt v1 configuration (see [docs](https://flipt.io/docs/configuration)) |
+| `flipt.config`        | object | `{}`                            | Flipt v1 configuration (see [docs](https://docs.flipt.io/configuration)) |
 | `flipt.extraEnvVars`  | array  | `[]`                            | Extra environment variables (must use FLIPT\_ prefix)                    |
 
 ## Examples
@@ -143,7 +143,7 @@ flipt:
       value: "postgres://user:password@postgres:5432/flipt?sslmode=disable"
 ```
 
-For more configuration examples, see the [Flipt v1 Configuration Documentation](https://flipt.io/docs/configuration).
+For more configuration examples, see the [Flipt v1 Configuration Documentation](https://docs.flipt.io/configuration).
 
 ## Troubleshooting
 
@@ -160,7 +160,7 @@ kubectl port-forward svc/my-flipt 8080:8080
 helm test my-flipt
 ```
 
-For configuration-specific troubleshooting, see the [Flipt v1 Documentation](https://flipt.io/docs/).
+For configuration-specific troubleshooting, see the [Flipt v1 Documentation](https://docs.flipt.io/).
 
 ## Contributing
 

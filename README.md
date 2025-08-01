@@ -14,7 +14,7 @@ The stable Flipt v1 chart provides a production-ready deployment of Flipt with d
 
 - **Chart Name**: `flipt`
 - **Status**: Stable
-- **Documentation**: [Chart README](charts/flipt/README.md) | [Flipt v1 Docs](https://flipt.io/docs)
+- **Documentation**: [Chart README](charts/flipt/README.md) | [Flipt v1 Docs](https://docs.flipt.io)
 
 **Installation:**
 
@@ -109,4 +109,3 @@ The source code of all [Flipt](https://flipt.io/) [Helm](https://helm.sh) charts
 ## License
 
 [MIT License](https://github.com/flipt-io/helm-charts/blob/main/LICENSE).
-

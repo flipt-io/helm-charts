@@ -6,7 +6,7 @@ image:
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
-  command: ["/flipt"]
+  command: ["/flipt", "server"]
 
 imagePullSecrets: []
 nameOverride: ""
@@ -160,12 +160,6 @@ persistence:
   size: 5Gi
 
 flipt:
-  # httpPort is the Flipt HTTP container port
-  # @deprecated use containerPorts.http instead
-  httpPort: 8080
-  # grpcPort is the Flipt GRPC container port
-  # @deprecated use containerPorts.grpc instead
-  grpcPort: 9000
   args: []
   # extraEnvVars is a list of extra environment variables to set e.g.
   # Environment variables MUST have FLIPT_ prefix for v2
@@ -175,102 +169,90 @@ flipt:
   envFrom: []
   
   # Flipt v2 Configuration
-  config:
-    log:
-      level: INFO
-      encoding: console
-      grpc_level: ERROR
+  # Uncomment and configure as needed - Flipt v2 uses sensible defaults
+  # config:
+  #   log:
+  #     level: INFO
+  #     encoding: console
+  #     grpc_level: ERROR
+  #
+  #   server:
+  #     protocol: http
+  #     host: 0.0.0.0
+  #     https_port: 443
+  #     http_port: 8080
+  #     grpc_port: 9000
+  #
+  #   # Git-native storage configuration (v2 core feature)
+  #   storage:
+  #     type: local
+  #     local:
+  #       path: /var/opt/flipt
+  #
+  #   # Multi-environment support (v2 core feature)
+  #   environments:
+  #     production:
+  #       name: "Production"
+  #       description: "Production environment"
+  #       storage:
+  #         type: local
+  #         local:
+  #           path: /var/opt/flipt/production
+  #
+  #   # Authentication configuration
+  #   authentication:
+  #     required: true
+  #     session:
+  #       domain: "your-domain.com"
+  #       secure: true
+  #       http_only: true
+  #       same_site: "Lax"
+  #     methods:
+  #       token:
+  #         enabled: true
+  #       oidc:
+  #         enabled: true
+  #         providers:
+  #           your-provider:
+  #             issuer_url: "https://your-oidc-provider.com"
+  #             client_id: "your-client-id"
+  #             client_secret: "your-client-secret"
+  #             redirect_address: "https://your-flipt-instance.com/auth/v1/method/oidc/your-provider/callback"
+  #
+  #   # Authorization configuration
+  #   authorization:
+  #     required: true
+  #     backend: "local"
+  #
+  #   # License configuration (v2 Pro features)
+  #   license:
+  #     key: ""
+  #     file: ""
+  #
+  #   # Git synchronization (v2 core feature)
+  #   git:
+  #     repository: "https://github.com/your-org/flipt-config.git"
+  #     ref: "main"
+  #     path: ""
+  #     polling_interval: "30s"
+  #     authentication:
+  #       basic:
+  #         username: ""
+  #         password: ""
+  #       token:
+  #         access_token: ""
+  #       ssh:
+  #         private_key_path: ""
+  #         password: ""
+  #         insecure_ignore_host_key: false
+  #
+  #   # Commit signing (v2 Pro feature)
+  #   commit_signing:
+  #     enabled: false
+  #     gpg:
+  #       private_key_path: ""
+  #       password: ""
 
-    server:
-      protocol: http
-      host: 0.0.0.0
-      https_port: 443
-      http_port: 8080
-      grpc_port: 9000
-
-    # Git-native storage configuration (v2 feature)
-    storage:
-      type: local
-      local:
-        path: /var/opt/flipt
-
-    # Multi-environment support (v2 feature)
-    environments:
-      default:
-        name: "Default"
-        description: "Default environment"
-        storage:
-          type: local
-          local:
-            path: /var/opt/flipt/default
-
-    # Authentication configuration (v2 enhanced)
-    authentication:
-      required: false
-      session:
-        domain: ""
-        secure: false
-        http_only: true
-        same_site: "Lax"
-        csrf:
-          key: ""
-      methods:
-        token:
-          enabled: true
-          cleanup:
-            interval: 1h
-            grace_period: 30m
-        oidc:
-          enabled: false
-          # providers:
-          #   google:
-          #     issuer_url: "https://accounts.google.com"
-          #     client_id: ""
-          #     client_secret: ""
-          #     redirect_address: ""
-          #     scopes: ["openid", "email", "profile"]
-
-    # Authorization configuration (v2 feature)
-    authorization:
-      required: false
-      backend: "local"
-      local:
-        policy:
-          default: "allow"
-
-    # License configuration (v2 Pro features)
-    license:
-      key: ""
-      file: ""
-
-    # Git synchronization (v2 feature)
-    git:
-      # repository: "https://github.com/your-org/flipt-config.git"
-      # ref: "main"
-      # path: ""
-      # polling_interval: "30s"
-      authentication:
-        # basic:
-        #   username: ""
-        #   password: ""
-        # token:
-        #   access_token: ""
-        # ssh:
-        #   private_key_path: ""
-        #   password: ""
-        #   insecure_ignore_host_key: false
-
-    # Commit signing (v2 Pro feature)
-    commit_signing:
-      enabled: false
-      # gpg:
-      #   private_key_path: ""
-      #   password: ""
-
-migration:
-  # Migration is less relevant for v2 git-native approach but kept for compatibility
-  enabled: false
-  deadLine: 600 # sec
 
 metrics:
   serviceMonitor:

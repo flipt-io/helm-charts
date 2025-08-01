@@ -1,16 +1,14 @@
 # Flipt v2 Helm Chart
 
-[Flipt](https://flipt.io) v2 is a Git-native, open-source feature flag solution with enhanced authentication, multi-environment support, and real-time streaming capabilities.
+[Flipt](https://flipt.io) v2 is a Git-native, open-source feature flag solution with multi-environment support and advanced workflow capabilities.
 
 ## Key Features
 
 - **Git-Native**: Store feature flags in your own Git repositories
 - **Multi-Environment**: Define multiple environments with independent configurations
-- **Enhanced Authentication**: OIDC support with session management
-- **Authorization**: Policy-based access control with OPA/Rego
-- **Real-time Updates**: Streaming mode for instant flag updates
-- **Pro Features**: License support for advanced capabilities
-- **Commit Signing**: GPG signing for configuration integrity
+- **Advanced Workflows**: Branch-based development with merge proposals
+- **Authentication & Authorization**: OIDC support and policy-based access control
+- **Pro Features**: License support for advanced capabilities including commit signing
 
 ## Installation
 
@@ -33,117 +31,36 @@ helm install my-flipt-v2 flipt/flipt-v2 -f values.yaml
 
 ## Configuration
 
-### Basic Configuration
+Flipt v2 uses sensible defaults and works out-of-the-box without any configuration. For advanced configuration, any option from the [Flipt v2 Configuration Documentation](https://docs.flipt.io/v2/configuration/overview) can be set under the `flipt.config` section in your values.yaml file.
 
 ```yaml
 # values.yaml
 flipt:
   config:
-    # Multi-environment setup
-    environments:
-      production:
-        name: "Production"
-        description: "Production environment"
-        storage:
-          type: git
-          git:
-            repository: "https://github.com/your-org/flipt-config.git"
-            ref: "main"
-            path: "production"
-      staging:
-        name: "Staging"
-        description: "Staging environment"
-        storage:
-          type: git
-          git:
-            repository: "https://github.com/your-org/flipt-config.git"
-            ref: "main"
-            path: "staging"
-```
-
-### Authentication & Authorization
-
-```yaml
-flipt:
-  config:
-    # Enable authentication
-    authentication:
-      required: true
-      session:
-        domain: "your-domain.com"
-        secure: true
-      methods:
-        oidc:
-          enabled: true
-          providers:
-            google:
-              issuer_url: "https://accounts.google.com"
-              client_id: "your-client-id"
-              client_secret: "your-client-secret"
-              redirect_address: "https://flipt.your-domain.com"
-              scopes: ["openid", "email", "profile"]
-
-    # Enable authorization
-    authorization:
-      required: true
-      backend: "local"
-      local:
-        policy:
-          default: "deny"
-```
-
-### Git Synchronization
-
-```yaml
-flipt:
-  config:
+    # Any configuration from https://docs.flipt.io/v2/configuration/overview
+    # can be placed here using the same YAML structure
+    
+    # Example: Set log level
+    log:
+      level: DEBUG
+    
+    # Example: Configure Git synchronization
     git:
       repository: "https://github.com/your-org/flipt-config.git"
       ref: "main"
-      polling_interval: "30s"
-      authentication:
-        token:
-          access_token: "your-github-token"
-
-# Add Git credentials via extraVolumes/extraVolumeMounts
-extraVolumes:
-  - name: git-credentials
-    secret:
-      secretName: flipt-git-secret
-
-extraVolumeMounts:
-  - name: git-credentials
-    mountPath: /etc/flipt/git
-    readOnly: true
 ```
 
-### Pro Features (License Required)
+### Configuration via Environment Variables
+
+You can also configure Flipt v2 using environment variables with the `FLIPT_` prefix:
 
 ```yaml
 flipt:
-  config:
-    # License configuration
-    license:
-      key: "your-license-key"
-      # Or use file-based license
-      # file: "/path/to/license.lic"
-
-    # Commit signing (Pro feature)
-    commit_signing:
-      enabled: true
-      gpg:
-        private_key_path: "/etc/flipt/gpg/private.key"
-
-# Mount GPG keys
-extraVolumes:
-  - name: gpg-keys
-    secret:
-      secretName: flipt-gpg-secret
-
-extraVolumeMounts:
-  - name: gpg-keys
-    mountPath: /etc/flipt/gpg
-    readOnly: true
+  extraEnvVars:
+    - name: FLIPT_LOG_LEVEL
+      value: "DEBUG"
+    - name: FLIPT_GIT_REPOSITORY
+      value: "https://github.com/your-org/flipt-config.git"
 ```
 
 ## Values
@@ -160,68 +77,33 @@ extraVolumeMounts:
 | `persistence.enabled` | bool | `false` | Enable persistent storage |
 | `persistence.size` | string | `"5Gi"` | Size of persistent volume |
 | `autoscaling.enabled` | bool | `false` | Enable horizontal pod autoscaling |
-| `flipt.config.environments` | object | `{}` | Multi-environment configuration |
-| `flipt.config.authentication.required` | bool | `false` | Enable authentication |
-| `flipt.config.authorization.required` | bool | `false` | Enable authorization |
-| `flipt.config.git` | object | `{}` | Git synchronization settings |
-| `flipt.config.license` | object | `{}` | License configuration for Pro features |
+| `flipt.config` | object | `{}` | Flipt v2 configuration (see [docs](https://docs.flipt.io/v2/configuration/overview)) |
+| `flipt.extraEnvVars` | array | `[]` | Extra environment variables (must use FLIPT_ prefix) |
 
 ## Differences from Flipt v1
 
 ### Architecture Changes
 - **Git-Native Storage**: v2 stores flags in Git repositories instead of databases
 - **Multi-Environment**: Server-defined environments vs UI-managed namespaces
-- **Enhanced Auth**: OIDC, sessions, and policy-based authorization
-- **Real-time Updates**: Streaming mode for instant flag synchronization
+- **Advanced Workflows**: Branch-based development with merge proposals
+- **No External Dependencies**: Standalone binary with optional Git synchronization
 
 ### Configuration Changes
 - Environment variables require `FLIPT_` prefix (e.g., `FLIPT_LOG_LEVEL`)
-- New configuration structure for environments, auth, and Git sync
-- License configuration for Pro features
+- Server command changed from `flipt` to `flipt server`
+- New configuration structure for environments and Git synchronization
 
 ### Migration Notes
-- v2 can read v1 flag data from Git repositories
+- v2 can import v1 flag data from Git repositories
 - Environment configuration moved from UI to server config
-- Authentication methods expanded with OIDC support
+- See [migration guide](https://docs.flipt.io/v2/guides/migration/) for detailed instructions
 
 ## Examples
 
-### Simple Local Development
+### Basic Installation with Ingress
 
 ```yaml
-# Simple setup for local development
-flipt:
-  config:
-    storage:
-      type: local
-      local:
-        path: /var/opt/flipt
-```
-
-### Production with OIDC and Git
-
-```yaml
-# Production setup with authentication and Git sync
-flipt:
-  config:
-    environments:
-      production:
-        storage:
-          type: git
-          git:
-            repository: "https://github.com/company/flags.git"
-            
-    authentication:
-      required: true
-      methods:
-        oidc:
-          enabled: true
-          providers:
-            okta:
-              issuer_url: "https://company.okta.com"
-              client_id: "flipt-client"
-              client_secret: "secret"
-
+# Basic setup with ingress
 ingress:
   enabled: true
   className: nginx
@@ -236,24 +118,29 @@ ingress:
         - flipt.company.com
 ```
 
+### Custom Configuration
+
+```yaml
+# Example custom configuration
+flipt:
+  config:
+    # Configure logging
+    log:
+      level: INFO
+      
+    # Set up Git synchronization
+    git:
+      repository: "https://github.com/company/flipt-config.git"
+      ref: "main"
+      
+    # Enable authentication (see docs for full options)
+    authentication:
+      required: true
+```
+
+For more configuration examples, see the [Flipt v2 Configuration Documentation](https://docs.flipt.io/v2/configuration/overview).
+
 ## Troubleshooting
-
-### Common Issues
-
-1. **Git Authentication Failures**
-   - Ensure Git credentials are properly mounted
-   - Check repository URL and access permissions
-   - Verify token/SSH key has required permissions
-
-2. **OIDC Authentication Issues**
-   - Verify redirect URLs match exactly
-   - Check client ID and secret configuration
-   - Ensure issuer URL is accessible from cluster
-
-3. **Environment Configuration**
-   - Environments must be defined in server config, not UI
-   - Each environment needs its own storage configuration
-   - Check environment names match API calls
 
 ### Debugging
 
@@ -267,6 +154,8 @@ kubectl port-forward svc/my-flipt-v2 8080:8080
 # Run chart tests
 helm test my-flipt-v2
 ```
+
+For configuration-specific troubleshooting, see the [Flipt v2 Documentation](https://docs.flipt.io/v2/).
 
 ## Contributing
 

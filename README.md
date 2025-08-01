@@ -109,3 +109,4 @@ The source code of all [Flipt](https://flipt.io/) [Helm](https://helm.sh) charts
 ## License
 
 [MIT License](https://github.com/flipt-io/helm-charts/blob/main/LICENSE).
+

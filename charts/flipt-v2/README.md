@@ -167,3 +167,4 @@ Please see the main [helm-charts repository](https://github.com/flipt-io/helm-ch
 ## License
 
 This chart is licensed under the MIT License. See the main repository for details.
+

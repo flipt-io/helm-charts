@@ -167,7 +167,6 @@ flipt:
   #   value: debug
   extraEnvVars: []
   envFrom: []
-  
   # Flipt v2 Configuration
   # Uncomment and configure as needed - Flipt v2 uses sensible defaults
   # config:

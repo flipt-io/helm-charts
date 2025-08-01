@@ -2,9 +2,6 @@
 
 <!-- Keep full URL links to repo files because this README syncs from main to gh-pages.  -->
 
-![Chart Version](https://img.shields.io/github/v/release/flipt-io/helm-charts?label=chart%20version)
-![Flipt Version](https://img.shields.io/github/v/release/flipt-io/flipt?color=green&label=flipt%20version)
-
 This repository contains Helm charts for [Flipt](https://flipt.io), an open-source, self-hosted feature flag solution.
 
 Please [create an issue](https://github.com/flipt-io/helm-charts/issues/new) or submit a pull request for any issues or missing features.

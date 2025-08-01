@@ -1,0 +1,54 @@
+{{- if or .Values.service.enabled (not (hasKey .Values.service "enabled")) }}
+{{- $root := . }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "flipt-v2.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "flipt-v2.labels" . | nindent 4 }}
+    {{- with .Values.service.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- with .Values.service.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if (or (eq .Values.service.type "ClusterIP") (empty .Values.service.type)) }}
+  type: ClusterIP
+  {{- with .Values.service.clusterIP }}
+  clusterIP: {{ . }}
+  {{- end }}
+  {{- else if eq .Values.service.type "LoadBalancer" }}
+  type: {{ .Values.service.type }}
+  {{- with .Values.service.loadBalancerIP }}
+  loadBalancerIP: {{ . }}
+  {{- end }}
+  {{- with .Values.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- else }}
+  type: {{ .Values.service.type }}
+  {{- end }}
+  {{- with .Values.service.externalIPs }}
+  externalIPs:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.service.httpPort }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: {{ .Values.service.httpsPort }}
+      targetPort: https
+      protocol: TCP
+      name: https
+    - port: {{ .Values.service.grpcPort }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+  selector:
+    {{- include "flipt-v2.selectorLabels" . | nindent 4 }}
+{{- end }}

@@ -26,7 +26,7 @@ if (semver.valid(inputTag) && semver.valid(currentVersion)) {
     console.log(`The appVersion was bumped with a ${diffType} change.`);
   } else {
     console.error(
-      `The appVersion was bumped, but it's not a minor or patch change. It's a ${diffType} change.`
+      `The appVersion was bumped, but it's not a minor or patch change. It's a ${diffType} change.`,
     );
     return 1;
   }

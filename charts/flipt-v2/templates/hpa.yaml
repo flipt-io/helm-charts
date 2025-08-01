@@ -1,16 +1,16 @@
 {{- if .Values.autoscaling.enabled }}
-apiVersion: {{ include "flipt.apiVersion.autoscaling" . }}
+apiVersion: {{ include "flipt-v2.apiVersion.autoscaling" . }}
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ include "flipt.fullname" . }}
+  name: {{ include "flipt-v2.fullname" . }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "flipt.labels" . | nindent 4 }}
+    {{- include "flipt-v2.labels" . | nindent 4 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "flipt.fullname" . }}
+    name: {{ include "flipt-v2.fullname" . }}
   minReplicas: {{ .Values.autoscaling.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.maxReplicas }}
   metrics:
@@ -18,7 +18,7 @@ spec:
     - type: Resource
       resource:
         name: cpu
-        {{- if eq (include "flipt.apiVersion.autoscaling" $) "autoscaling/v2beta1" }}
+        {{- if eq (include "flipt-v2.apiVersion.autoscaling" $) "autoscaling/v2beta1" }}
         targetAverageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
         {{- else }}
         target:
@@ -30,7 +30,7 @@ spec:
     - type: Resource
       resource:
         name: memory
-        {{- if eq (include "flipt.apiVersion.autoscaling" $) "autoscaling/v2beta1" }}
+        {{- if eq (include "flipt-v2.apiVersion.autoscaling" $) "autoscaling/v2beta1" }}
         targetAverageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
         {{- else }}
         target:

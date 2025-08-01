@@ -243,6 +243,7 @@ kubectl run -it --rm debug --image=busybox --restart=Never -- sh
 ### 1. Modify Chart Files
 
 Make your changes to:
+
 - `charts/flipt/` (for v1 changes)
 - `charts/flipt-v2/` (for v2 changes)
 

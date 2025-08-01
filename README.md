@@ -17,6 +17,7 @@ The stable Flipt v1 chart provides a production-ready deployment of Flipt with d
 - **Documentation**: [Chart README](charts/flipt/README.md) | [Flipt v1 Docs](https://flipt.io/docs)
 
 **Installation:**
+
 ```console
 helm repo add flipt https://helm.flipt.io
 helm install my-flipt flipt/flipt
@@ -31,6 +32,7 @@ The Flipt v2 chart provides Git-native feature flag management with real-time st
 - **Documentation**: [Chart README](charts/flipt-v2/README.md) | [Flipt v2 Docs](https://docs.flipt.io/v2/)
 
 **Installation:**
+
 ```console
 helm repo add flipt https://helm.flipt.io
 helm install my-flipt-v2 flipt/flipt-v2
@@ -57,21 +59,22 @@ helm search repo flipt
 
 ## Chart Comparison
 
-| Feature | Flipt v1 | Flipt v2 |
-|---------|----------|----------|
-| **Status** | Stable | Beta |
-| **Storage** | Database (SQLite, PostgreSQL, MySQL, etc.) | Git-native |
-| **Real-time Updates** | ❌ Polling-based | ✅ Streaming API with real-time flag changes |
-| **Secrets Management** | ❌ Manual configuration | ✅ Built-in (File, HashiCorp Vault, more) |
-| **Environments** | UI-managed namespaces | Server-defined multi-environments |
-| **Workflows** | Traditional UI management | Branch-based development with merge proposals |
-| **Dependencies** | Database required | Standalone binary, optional Git sync |
-| **Configuration** | Database + config file/env vars | Git repositories + config file/env vars |
-| **Commit Signing** | ❌ Not supported | ✅ GPG signing support |
+| Feature                | Flipt v1                                   | Flipt v2                                      |
+| ---------------------- | ------------------------------------------ | --------------------------------------------- |
+| **Status**             | Stable                                     | Beta                                          |
+| **Storage**            | Database (SQLite, PostgreSQL, MySQL, etc.) | Git-native                                    |
+| **Real-time Updates**  | ❌ Polling-based                           | ✅ Streaming API with real-time flag changes  |
+| **Secrets Management** | ❌ Manual configuration                    | ✅ Built-in (File, HashiCorp Vault, more)     |
+| **Environments**       | UI-managed namespaces                      | Server-defined multi-environments             |
+| **Workflows**          | Traditional UI management                  | Branch-based development with merge proposals |
+| **Dependencies**       | Database required                          | Standalone binary, optional Git sync          |
+| **Configuration**      | Database + config file/env vars            | Git repositories + config file/env vars       |
+| **Commit Signing**     | ❌ Not supported                           | ✅ GPG signing support                        |
 
 ## Choosing Between v1 and v2
 
 **Choose Flipt v1 if:**
+
 - You need a stable, production-ready solution
 - You prefer traditional database-backed storage
 - You want UI-managed namespaces
@@ -79,6 +82,7 @@ helm search repo flipt
 - You're okay with polling-based updates
 
 **Choose Flipt v2 if:**
+
 - You want Git-native feature flag management
 - You need real-time streaming updates for flag changes
 - You require built-in secrets management (Vault, etc.)

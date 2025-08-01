@@ -53,7 +53,7 @@ The chart supports ingress configuration with automatic generation of the requir
 flipt:
   ingress:
     enabled: true
-    className: nginx  # optional: only if you're using a specific ingress class
+    className: nginx # optional: only if you're using a specific ingress class
     hosts:
       - host: flipt.example.com
         paths:
@@ -93,19 +93,19 @@ You can also configure this chart using YAML. See the [values.yaml](https://gith
 
 ## Values
 
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-| `replicaCount` | int | `1` | Number of replicas |
-| `image.repository` | string | `"docker.flipt.io/flipt/flipt"` | Image repository |
-| `image.tag` | string | `""` | Image tag (defaults to chart appVersion) |
-| `service.type` | string | `"ClusterIP"` | Kubernetes service type |
-| `service.httpPort` | int | `8080` | HTTP service port |
-| `service.grpcPort` | int | `9000` | gRPC service port |
-| `ingress.enabled` | bool | `false` | Enable ingress controller resource |
-| `persistence.enabled` | bool | `false` | Enable persistent storage |
-| `autoscaling.enabled` | bool | `false` | Enable horizontal pod autoscaling |
-| `flipt.config` | object | `{}` | Flipt v1 configuration (see [docs](https://flipt.io/docs/configuration)) |
-| `flipt.extraEnvVars` | array | `[]` | Extra environment variables (must use FLIPT_ prefix) |
+| Key                   | Type   | Default                         | Description                                                              |
+| --------------------- | ------ | ------------------------------- | ------------------------------------------------------------------------ |
+| `replicaCount`        | int    | `1`                             | Number of replicas                                                       |
+| `image.repository`    | string | `"docker.flipt.io/flipt/flipt"` | Image repository                                                         |
+| `image.tag`           | string | `""`                            | Image tag (defaults to chart appVersion)                                 |
+| `service.type`        | string | `"ClusterIP"`                   | Kubernetes service type                                                  |
+| `service.httpPort`    | int    | `8080`                          | HTTP service port                                                        |
+| `service.grpcPort`    | int    | `9000`                          | gRPC service port                                                        |
+| `ingress.enabled`     | bool   | `false`                         | Enable ingress controller resource                                       |
+| `persistence.enabled` | bool   | `false`                         | Enable persistent storage                                                |
+| `autoscaling.enabled` | bool   | `false`                         | Enable horizontal pod autoscaling                                        |
+| `flipt.config`        | object | `{}`                            | Flipt v1 configuration (see [docs](https://flipt.io/docs/configuration)) |
+| `flipt.extraEnvVars`  | array  | `[]`                            | Extra environment variables (must use FLIPT\_ prefix)                    |
 
 ## Examples
 
@@ -135,7 +135,7 @@ flipt:
   config:
     db:
       url: "postgres://user:password@postgres:5432/flipt?sslmode=disable"
-    
+
 # Or via environment variables
 flipt:
   extraEnvVars:

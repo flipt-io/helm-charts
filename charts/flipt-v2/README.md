@@ -39,11 +39,11 @@ flipt:
   config:
     # Any configuration from https://docs.flipt.io/v2/configuration/overview
     # can be placed here using the same YAML structure
-    
+
     # Example: Set log level
     log:
       level: DEBUG
-    
+
     # Example: Configure Git synchronization
     git:
       repository: "https://github.com/your-org/flipt-config.git"
@@ -65,35 +65,38 @@ flipt:
 
 ## Values
 
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-| `replicaCount` | int | `1` | Number of replicas |
-| `image.repository` | string | `"docker.flipt.io/flipt/flipt"` | Image repository |
-| `image.tag` | string | `""` | Image tag (defaults to chart appVersion) |
-| `service.type` | string | `"ClusterIP"` | Kubernetes service type |
-| `service.httpPort` | int | `8080` | HTTP service port |
-| `service.grpcPort` | int | `9000` | gRPC service port |
-| `ingress.enabled` | bool | `false` | Enable ingress controller resource |
-| `persistence.enabled` | bool | `false` | Enable persistent storage |
-| `persistence.size` | string | `"5Gi"` | Size of persistent volume |
-| `autoscaling.enabled` | bool | `false` | Enable horizontal pod autoscaling |
-| `flipt.config` | object | `{}` | Flipt v2 configuration (see [docs](https://docs.flipt.io/v2/configuration/overview)) |
-| `flipt.extraEnvVars` | array | `[]` | Extra environment variables (must use FLIPT_ prefix) |
+| Key                   | Type   | Default                         | Description                                                                          |
+| --------------------- | ------ | ------------------------------- | ------------------------------------------------------------------------------------ |
+| `replicaCount`        | int    | `1`                             | Number of replicas                                                                   |
+| `image.repository`    | string | `"docker.flipt.io/flipt/flipt"` | Image repository                                                                     |
+| `image.tag`           | string | `""`                            | Image tag (defaults to chart appVersion)                                             |
+| `service.type`        | string | `"ClusterIP"`                   | Kubernetes service type                                                              |
+| `service.httpPort`    | int    | `8080`                          | HTTP service port                                                                    |
+| `service.grpcPort`    | int    | `9000`                          | gRPC service port                                                                    |
+| `ingress.enabled`     | bool   | `false`                         | Enable ingress controller resource                                                   |
+| `persistence.enabled` | bool   | `false`                         | Enable persistent storage                                                            |
+| `persistence.size`    | string | `"5Gi"`                         | Size of persistent volume                                                            |
+| `autoscaling.enabled` | bool   | `false`                         | Enable horizontal pod autoscaling                                                    |
+| `flipt.config`        | object | `{}`                            | Flipt v2 configuration (see [docs](https://docs.flipt.io/v2/configuration/overview)) |
+| `flipt.extraEnvVars`  | array  | `[]`                            | Extra environment variables (must use FLIPT\_ prefix)                                |
 
 ## Differences from Flipt v1
 
 ### Architecture Changes
+
 - **Git-Native Storage**: v2 stores flags in Git repositories instead of databases
 - **Multi-Environment**: Server-defined environments vs UI-managed namespaces
 - **Advanced Workflows**: Branch-based development with merge proposals
 - **No External Dependencies**: Standalone binary with optional Git synchronization
 
 ### Configuration Changes
+
 - Environment variables require `FLIPT_` prefix (e.g., `FLIPT_LOG_LEVEL`)
 - Server command changed from `flipt` to `flipt server`
 - New configuration structure for environments and Git synchronization
 
 ### Migration Notes
+
 - v2 can import v1 flag data from Git repositories
 - Environment configuration moved from UI to server config
 - See [migration guide](https://docs.flipt.io/v2/guides/migration/) for detailed instructions
@@ -127,12 +130,12 @@ flipt:
     # Configure logging
     log:
       level: INFO
-      
+
     # Set up Git synchronization
     git:
       repository: "https://github.com/company/flipt-config.git"
       ref: "main"
-      
+
     # Enable authentication (see docs for full options)
     authentication:
       required: true

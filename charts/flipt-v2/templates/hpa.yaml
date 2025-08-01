@@ -31,7 +31,7 @@ spec:
       resource:
         name: memory
         {{- if eq (include "flipt-v2.apiVersion.autoscaling" $) "autoscaling/v2beta1" }}
-        targetAverageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
+        targetAverageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
         {{- else }}
         target:
           type: Utilization 

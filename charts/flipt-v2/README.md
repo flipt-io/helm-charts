@@ -102,9 +102,8 @@ flipt:
 
 ### Migration Notes
 
-- v2 can import v1 flag data from Git repositories
+- v2 can import v1 flag data from existing Git repositories
 - Environment configuration moved from UI to server config
-- See [migration guide](https://docs.flipt.io/v2/guides/migration) for detailed instructions
 
 ## Examples
 
@@ -177,4 +176,3 @@ Please see the main [helm-charts repository](https://github.com/flipt-io/helm-ch
 ## License
 
 This chart is licensed under the MIT License. See the main repository for details.
-

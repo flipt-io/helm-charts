@@ -35,7 +35,11 @@ The Flipt v2 chart provides Git-native feature flag management with real-time st
 
 ```console
 helm repo add flipt https://helm.flipt.io
-helm install my-flipt-v2 flipt/flipt-v2
+# v2 chart is currently in beta, requires --devel flag or explicit version
+helm install my-flipt-v2 flipt/flipt-v2 --devel
+
+# Or install with explicit version
+helm install my-flipt-v2 flipt/flipt-v2 --version 2.0.0-beta
 ```
 
 ## Quick Start
@@ -54,7 +58,11 @@ helm repo update
 ### List Available Charts
 
 ```console
+# List stable charts only (v1)
 helm search repo flipt
+
+# List all charts including beta versions (v1 + v2)
+helm search repo flipt --devel
 ```
 
 ## Chart Comparison

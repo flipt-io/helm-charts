@@ -14,7 +14,7 @@ The stable Flipt v1 chart provides a production-ready deployment of Flipt with d
 
 - **Chart Name**: `flipt`
 - **Status**: Stable
-- **Documentation**: [charts/flipt/README.md](charts/flipt/README.md)
+- **Documentation**: [Chart README](charts/flipt/README.md) | [Flipt v1 Docs](https://flipt.io/docs)
 
 **Installation:**
 ```console
@@ -24,11 +24,11 @@ helm install my-flipt flipt/flipt
 
 ### Flipt v2 (Beta)
 
-The Flipt v2 chart provides Git-native feature flag management with multi-environment support and advanced workflows.
+The Flipt v2 chart provides Git-native feature flag management with real-time streaming, built-in secrets management, and advanced multi-environment workflows.
 
 - **Chart Name**: `flipt-v2`
 - **Status**: Beta
-- **Documentation**: [charts/flipt-v2/README.md](charts/flipt-v2/README.md)
+- **Documentation**: [Chart README](charts/flipt-v2/README.md) | [Flipt v2 Docs](https://docs.flipt.io/v2/)
 
 **Installation:**
 ```console
@@ -61,10 +61,13 @@ helm search repo flipt
 |---------|----------|----------|
 | **Status** | Stable | Beta |
 | **Storage** | Database (SQLite, PostgreSQL, MySQL, etc.) | Git-native |
-| **Environments** | UI-managed namespaces | Server-defined environments |
+| **Real-time Updates** | ❌ Polling-based | ✅ Streaming API with real-time flag changes |
+| **Secrets Management** | ❌ Manual configuration | ✅ Built-in (File, HashiCorp Vault, more) |
+| **Environments** | UI-managed namespaces | Server-defined multi-environments |
 | **Workflows** | Traditional UI management | Branch-based development with merge proposals |
 | **Dependencies** | Database required | Standalone binary, optional Git sync |
 | **Configuration** | Database + config file/env vars | Git repositories + config file/env vars |
+| **Commit Signing** | ❌ Not supported | ✅ GPG signing support |
 
 ## Choosing Between v1 and v2
 
@@ -73,11 +76,15 @@ helm search repo flipt
 - You prefer traditional database-backed storage
 - You want UI-managed namespaces
 - You need proven reliability and extensive documentation
+- You're okay with polling-based updates
 
 **Choose Flipt v2 if:**
 - You want Git-native feature flag management
+- You need real-time streaming updates for flag changes
+- You require built-in secrets management (Vault, etc.)
 - You need multi-environment support with Git workflows
 - You prefer branch-based development and merge proposals
+- You want GPG commit signing capabilities
 - You don't mind beta software and want cutting-edge features
 
 ## Versioning

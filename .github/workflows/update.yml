@@ -1,5 +1,10 @@
 on:
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Flipt release tag (e.g., v1.60.0, v2.1.0). If not provided, will fetch latest release.'
+        required: false
+        type: string
 
 permissions:
   contents: write
@@ -18,12 +23,19 @@ jobs:
         with:
           node-version: "18"
 
-      - name: Fetch Latest Flipt Release Tag
+      - name: Fetch or Use Flipt Release Tag
         id: fetch_tag
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG=$(gh release view -R flipt-io/flipt --json tagName | jq -r .tagName)
+          # Use provided tag or fetch latest release
+          if [[ -n "${{ github.event.inputs.tag }}" ]]; then
+            TAG="${{ github.event.inputs.tag }}"
+            echo "Using provided tag: ${TAG}"
+          else
+            TAG=$(gh release view -R flipt-io/flipt --json tagName | jq -r .tagName)
+            echo "Fetched latest release tag: ${TAG}"
+          fi
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
 
           # Determine chart type based on tag prefix

@@ -22,17 +22,13 @@ helm repo update
 ### Install Chart
 
 ```bash
-# Install with default values (beta chart requires --devel flag)
-helm install my-flipt-v2 flipt/flipt-v2 --devel
-
-# Or install with explicit version
-helm install my-flipt-v2 flipt/flipt-v2 --version 2.0.0-beta
+# Install with default values
+helm install my-flipt-v2 flipt/flipt-v2
 
 # Install with custom values
-helm install my-flipt-v2 flipt/flipt-v2 --devel -f values.yaml
+helm install my-flipt-v2 flipt/flipt-v2 -f values.yaml
 ```
 
-> **Note**: Flipt v2 chart is currently in beta (version `2.0.0-beta`). Helm hides pre-release versions by default, so you need either the `--devel` flag or an explicit `--version` to install it.
 
 ## Configuration
 

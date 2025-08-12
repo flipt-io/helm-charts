@@ -23,12 +23,12 @@ helm repo add flipt https://helm.flipt.io
 helm install my-flipt flipt/flipt
 ```
 
-### Flipt v2 (Beta)
+### Flipt v2 (Stable)
 
 The Flipt v2 chart provides Git-native feature flag management with real-time streaming, built-in secrets management, and advanced multi-environment workflows.
 
 - **Chart Name**: `flipt-v2`
-- **Status**: Beta
+- **Status**: Stable
 - **Documentation**: [Chart README](charts/flipt-v2/README.md) | [Flipt v2 Docs](https://docs.flipt.io/v2/)
 
 **Installation:**
@@ -69,7 +69,7 @@ helm search repo flipt --devel
 
 | Feature                | Flipt v1                                   | Flipt v2                                      |
 | ---------------------- | ------------------------------------------ | --------------------------------------------- |
-| **Status**             | Stable                                     | Beta                                          |
+| **Status**             | Stable                                     | Stable                                        |
 | **Storage**            | Database (SQLite, PostgreSQL, MySQL, etc.) | Git-native                                    |
 | **Real-time Updates**  | ❌ Polling-based                           | ✅ Streaming API with real-time flag changes  |
 | **Secrets Management** | ❌ Manual configuration                    | ✅ Built-in (File, HashiCorp Vault, more)     |
@@ -97,7 +97,7 @@ helm search repo flipt --devel
 - You need multi-environment support with Git workflows
 - You prefer branch-based development and merge proposals
 - You want GPG commit signing capabilities
-- You don't mind beta software and want cutting-edge features
+- You want production-ready Git-native feature flag management
 
 ## Versioning
 

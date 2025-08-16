@@ -1,10 +1,12 @@
 apiVersion: v2
 name: flipt-v2
 home: https://flipt.io
-description: Flipt v2 is a Git-native, open-source feature flag solution with enhanced authentication and multi-environment support.
+description: >-
+  Flipt v2 is a Git-native, open-source feature flag solution with enhanced
+  authentication and multi-environment support.
 type: application
-version: 2.0.0
-appVersion: v2.0.0
+version: 2.0.1
+appVersion: v2.0.1
 maintainers:
   - name: Flipt
     url: https://github.com/flipt-io/helm-charts

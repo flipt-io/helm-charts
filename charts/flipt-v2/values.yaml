@@ -36,6 +36,9 @@ podSecurityContext:
   runAsGroup: 1000
   fsGroup: 1000
 
+# Specifies whether a specific priorityClassName should be used
+# priorityClassName: ""
+
 securityContext:
   allowPrivilegeEscalation: false
   capabilities:

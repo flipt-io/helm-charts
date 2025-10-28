@@ -2251,6 +2251,30 @@ entries:
     version: 0.2.0
   flipt-v2:
   - apiVersion: v2
+    appVersion: v2.3.0
+    created: "2025-10-28T13:59:33.754612893Z"
+    description: Flipt v2 is a Git-native, open-source feature flag solution with
+      enhanced authentication and multi-environment support.
+    digest: 214733a165e361aa5a3cb4b256c86835390b940d083a549730da73062761d4c2
+    home: https://flipt.io
+    keywords:
+    - feature-flags
+    - flipt
+    - configuration
+    - git-native
+    - feature-management
+    maintainers:
+    - name: Flipt
+      url: https://github.com/flipt-io/helm-charts
+    name: flipt-v2
+    sources:
+    - https://github.com/flipt-io/flipt
+    - https://github.com/flipt-io/helm-charts
+    type: application
+    urls:
+    - https://github.com/flipt-io/helm-charts/releases/download/flipt-v2-2.3.0/flipt-v2-2.3.0.tgz
+    version: 2.3.0
+  - apiVersion: v2
     appVersion: v2.2.0
     created: "2025-10-03T00:30:38.007867807Z"
     description: Flipt v2 is a Git-native, open-source feature flag solution with
@@ -2490,4 +2514,4 @@ entries:
     urls:
     - https://github.com/flipt-io/helm-charts/releases/download/flipt-v2-2.0.0-beta/flipt-v2-2.0.0-beta.tgz
     version: 2.0.0-beta
-generated: "2025-10-03T00:30:38.008240664Z"
+generated: "2025-10-28T13:59:33.754931739Z"

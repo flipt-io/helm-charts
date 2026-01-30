@@ -53,6 +53,9 @@ spec:
               subPath: default.yml
             - name: flipt-data
               mountPath: /var/opt/flipt
+            {{- if .Values.extraVolumeMounts }}
+            {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
+            {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       volumes:
@@ -67,6 +70,9 @@ spec:
             claimName: {{ default (include "flipt.fullname" .) .Values.persistence.existingClaim }}
         {{- else }}
           emptyDir: { }
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- toYaml .Values.extraVolumes | nindent 8 }}
         {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:

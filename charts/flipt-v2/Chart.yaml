@@ -5,7 +5,7 @@ description: >-
   Flipt v2 is a Git-native, open-source feature flag solution with enhanced
   authentication and multi-environment support.
 type: application
-version: 2.6.0
+version: 2.6.1
 appVersion: v2.6.0
 maintainers:
   - name: Flipt

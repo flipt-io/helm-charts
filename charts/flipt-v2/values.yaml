@@ -144,6 +144,8 @@ containerPorts:
 persistence:
   ## enabled enables persistence using Persistent Volume Claims
   enabled: false
+  ## labels are additional custom labels for the PVC                                                       │
+  labels: {}
   ## annotations are additional custom annotations for the PVC
   annotations: {}
   ## existingClaim sets the name of an existing PVC to use for persistence

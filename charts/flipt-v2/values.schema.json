@@ -1,0 +1,711 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "affinity": {
+      "additionalProperties": false,
+      "title": "affinity",
+      "type": "object"
+    },
+    "autoscaling": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "default": false,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "maxReplicas": {
+          "default": 100,
+          "title": "maxReplicas",
+          "type": "integer"
+        },
+        "minReplicas": {
+          "default": 1,
+          "title": "minReplicas",
+          "type": "integer"
+        },
+        "targetCPUUtilizationPercentage": {
+          "default": 80,
+          "title": "targetCPUUtilizationPercentage",
+          "type": "integer"
+        }
+      },
+      "title": "autoscaling",
+      "type": "object"
+    },
+    "containerPorts": {
+      "additionalProperties": false,
+      "description": "Container ports configuration for the Flipt pod",
+      "properties": {
+        "grpc": {
+          "default": 9000,
+          "description": "Flipt GRPC container port",
+          "title": "grpc",
+          "type": "integer"
+        },
+        "http": {
+          "default": 8080,
+          "description": "Flipt HTTP container port",
+          "title": "http",
+          "type": "integer"
+        },
+        "https": {
+          "default": 443,
+          "description": "Flipt HTTPS container port",
+          "title": "https",
+          "type": "integer"
+        }
+      },
+      "title": "containerPorts",
+      "type": "object"
+    },
+    "deploymentAnnotations": {
+      "additionalProperties": false,
+      "title": "deploymentAnnotations",
+      "type": "object"
+    },
+    "deploymentLabels": {
+      "additionalProperties": false,
+      "title": "deploymentLabels",
+      "type": "object"
+    },
+    "extraDeploy": {
+      "description": "Array of extra Kubernetes manifests to deploy",
+      "items": {},
+      "title": "extraDeploy",
+      "type": "array",
+      "default": []
+    },
+    "extraVolumeMounts": {
+      "description": "extraVolumeMounts is a list of extra volumes to mount to the flipt container\n- name: flipt-git-ssh-key\n  mountPath: /etc/flipt/ssh.key\n  subPath: ssh.key\n- name: flipt-config-git\n  mountPath: /var/opt/flipt",
+      "items": {},
+      "title": "extraVolumeMounts",
+      "type": "array",
+      "default": []
+    },
+    "extraVolumes": {
+      "description": "extraVolumes is a list of extra volumes to mount to the pod\n- name: flipt-git-ssh-key\n  secret:\n    secretName: flipt-git-ssh-key-secret\n- name: flipt-config-git\n  emptyDir: {}",
+      "items": {},
+      "title": "extraVolumes",
+      "type": "array",
+      "default": []
+    },
+    "flipt": {
+      "additionalProperties": false,
+      "properties": {
+        "args": {
+          "items": {},
+          "title": "args",
+          "type": "array",
+          "default": []
+        },
+        "envFrom": {
+          "items": {},
+          "title": "envFrom",
+          "type": "array",
+          "default": []
+        },
+        "extraEnvVars": {
+          "description": "extraEnvVars is a list of extra environment variables to set e.g.\nEnvironment variables MUST have FLIPT_ prefix for v2\n- name: FLIPT_LOG_LEVEL\n  value: debug",
+          "items": {},
+          "title": "extraEnvVars",
+          "type": "array",
+          "default": []
+        },
+        "config": {
+          "$ref": "https://raw.githubusercontent.com/flipt-io/flipt/refs/heads/v2/config/flipt.schema.json"
+        }
+      },
+      "title": "flipt",
+      "type": "object"
+    },
+    "fullnameOverride": {
+      "default": "",
+      "title": "fullnameOverride",
+      "type": "string"
+    },
+    "global": {
+      "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
+      "title": "global",
+      "type": "object"
+    },
+    "image": {
+      "additionalProperties": false,
+      "properties": {
+        "command": {
+          "default": [
+            "/flipt",
+            "server"
+          ],
+          "description": "Command to run in the container",
+          "items": {
+            "type": "string"
+          },
+          "title": "command",
+          "type": "array"
+        },
+        "pullPolicy": {
+          "default": "IfNotPresent",
+          "title": "pullPolicy",
+          "type": "string"
+        },
+        "repository": {
+          "default": "docker.flipt.io/flipt/flipt",
+          "title": "repository",
+          "type": "string"
+        },
+        "tag": {
+          "default": "",
+          "description": "Overrides the image tag whose default is the chart appVersion.",
+          "title": "tag",
+          "type": "string"
+        }
+      },
+      "title": "image",
+      "type": "object"
+    },
+    "imagePullSecrets": {
+      "items": {},
+      "title": "imagePullSecrets",
+      "type": "array",
+      "default": []
+    },
+    "ingress": {
+      "additionalProperties": false,
+      "properties": {
+        "annotations": {
+          "additionalProperties": false,
+          "title": "annotations",
+          "type": "object",
+          "default": {}
+        },
+        "className": {
+          "default": "",
+          "title": "className",
+          "type": "string"
+        },
+        "enabled": {
+          "default": false,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "hosts": {
+          "description": "kubernetes.io/ingress.class: nginx\nkubernetes.io/tls-acme: \"true\"",
+          "items": {
+            "type": "object"
+          },
+          "title": "hosts",
+          "type": "array",
+          "default": [
+            {
+              "host": "flipt.local",
+              "paths": [
+                {
+                  "path": "/",
+                  "pathType": "ImplementationSpecific",
+                  "backend": {
+                    "servicePort": "http",
+                    "serviceName": ""
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "tls": {
+          "items": {},
+          "title": "tls",
+          "type": "array",
+          "default": []
+        }
+      },
+      "title": "ingress",
+      "type": "object"
+    },
+    "livenessProbe": {
+      "additionalProperties": false,
+      "properties": {
+        "httpGet": {
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "default": "/health",
+              "title": "path",
+              "type": "string"
+            },
+            "port": {
+              "default": "http",
+              "title": "port",
+              "type": "string"
+            }
+          },
+          "title": "httpGet",
+          "type": "object",
+          "default": {
+            "path": "/health",
+            "port": "http"
+          }
+        },
+        "initialDelaySeconds": {
+          "default": 3,
+          "title": "initialDelaySeconds",
+          "type": "integer"
+        }
+      },
+      "title": "livenessProbe",
+      "type": "object"
+    },
+    "metrics": {
+      "additionalProperties": false,
+      "properties": {
+        "serviceMonitor": {
+          "additionalProperties": false,
+          "properties": {
+            "annotations": {
+              "additionalProperties": false,
+              "description": "ServiceMonitor annotations",
+              "title": "annotations",
+              "type": "object",
+              "default": {}
+            },
+            "enabled": {
+              "default": false,
+              "description": "If enabled, ServiceMonitor resources for Prometheus Operator are created",
+              "title": "enabled",
+              "type": "boolean"
+            },
+            "honorLabels": {
+              "default": false,
+              "description": "What to do when flipt metrics labels are conflicting with Prometheus server-side labels.",
+              "title": "honorLabels",
+              "type": "boolean"
+            },
+            "interval": {
+              "default": "15s",
+              "description": "ServiceMonitor scrape interval",
+              "title": "interval",
+              "type": "string"
+            },
+            "labels": {
+              "additionalProperties": false,
+              "description": "Additional ServiceMonitor labels",
+              "title": "labels",
+              "type": "object",
+              "default": {}
+            },
+            "namespaceSelector": {
+              "additionalProperties": false,
+              "description": "Namespace selector for ServiceMonitor resources",
+              "title": "namespaceSelector",
+              "type": "object",
+              "default": {}
+            },
+            "port": {
+              "default": "http",
+              "description": "Port where to scrape metrics from",
+              "title": "port",
+              "type": "string"
+            },
+            "relabelings": {
+              "description": "ServiceMonitor relabel configs to apply to samples before scraping",
+              "items": {},
+              "title": "relabelings",
+              "type": "array",
+              "default": []
+            },
+            "scheme": {
+              "default": "http",
+              "description": "ServiceMonitor will use http by default, but you can pick https as well",
+              "title": "scheme",
+              "type": "string"
+            },
+            "scrapeTimeout": {
+              "default": "null",
+              "description": "ServiceMonitor scrape timeout in Go duration format (e.g. 15s)",
+              "title": "scrapeTimeout",
+              "type": "null"
+            },
+            "tlsConfig": {
+              "default": "null",
+              "description": "ServiceMonitor will use these tlsConfig settings to make the health check requests",
+              "title": "tlsConfig",
+              "type": "null"
+            }
+          },
+          "title": "serviceMonitor",
+          "type": "object",
+          "default": {
+            "enabled": false,
+            "port": "http",
+            "namespaceSelector": {},
+            "annotations": {},
+            "labels": {},
+            "interval": "15s",
+            "relabelings": [],
+            "honorLabels": false,
+            "scheme": "http"
+          }
+        }
+      },
+      "title": "metrics",
+      "type": "object"
+    },
+    "minReadySeconds": {
+      "default": 0,
+      "title": "minReadySeconds",
+      "type": "integer"
+    },
+    "nameOverride": {
+      "default": "",
+      "title": "nameOverride",
+      "type": "string"
+    },
+    "nodeSelector": {
+      "additionalProperties": false,
+      "title": "nodeSelector",
+      "type": "object"
+    },
+    "pdb": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "default": false,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "maxUnavailable": {
+          "default": "25%",
+          "title": "maxUnavailable",
+          "type": "string"
+        }
+      },
+      "title": "pdb",
+      "type": "object"
+    },
+    "persistence": {
+      "additionalProperties": false,
+      "description": "Persistence configuration for Flipt data storage. Reference: https://kubernetes.io/docs/user-guide/persistent-volumes/",
+      "properties": {
+        "accessModes": {
+          "description": "Persistent Volume access modes (e.g., [\"ReadWriteOnce\"])",
+          "items": {
+            "type": "string"
+          },
+          "title": "accessModes",
+          "type": "array",
+          "default": [
+            "ReadWriteOnce"
+          ]
+        },
+        "annotations": {
+          "additionalProperties": false,
+          "description": "Additional custom annotations for the PVC",
+          "title": "annotations",
+          "type": "object",
+          "default": {}
+        },
+        "enabled": {
+          "default": false,
+          "description": "Enable persistence using Persistent Volume Claims",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "existingClaim": {
+          "default": "",
+          "description": "Name of an existing PVC to use for persistence",
+          "title": "existingClaim",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": false,
+          "description": "Additional custom labels for the PVC",
+          "title": "labels",
+          "type": "object",
+          "default": {}
+        },
+        "size": {
+          "default": "5Gi",
+          "description": "Persistent Volume size (e.g., 5Gi, 10Gi)",
+          "title": "size",
+          "type": "string"
+        },
+        "storageClass": {
+          "default": "",
+          "description": "Persistent Volume storage class. Use '-' to disable dynamic provisioning, leave empty for default provisioner",
+          "title": "storageClass",
+          "type": "string"
+        },
+        "subPath": {
+          "default": "",
+          "description": "Sub path within the volume to mount for persistence",
+          "title": "subPath",
+          "type": "string"
+        }
+      },
+      "title": "persistence",
+      "type": "object"
+    },
+    "podAnnotations": {
+      "additionalProperties": false,
+      "description": "Can pin the version of busybox to a specific version\ntag: '1.36.1'",
+      "title": "podAnnotations",
+      "type": "object"
+    },
+    "podLabels": {
+      "additionalProperties": false,
+      "title": "podLabels",
+      "type": "object"
+    },
+    "podSecurityContext": {
+      "additionalProperties": false,
+      "properties": {
+        "fsGroup": {
+          "default": 1000,
+          "title": "fsGroup",
+          "type": "integer"
+        },
+        "runAsGroup": {
+          "default": 1000,
+          "title": "runAsGroup",
+          "type": "integer"
+        },
+        "runAsUser": {
+          "default": 100,
+          "title": "runAsUser",
+          "type": "integer"
+        }
+      },
+      "title": "podSecurityContext",
+      "type": "object"
+    },
+    "readinessProbe": {
+      "additionalProperties": false,
+      "properties": {
+        "httpGet": {
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "default": "/health",
+              "title": "path",
+              "type": "string"
+            },
+            "port": {
+              "default": "http",
+              "title": "port",
+              "type": "string"
+            }
+          },
+          "title": "httpGet",
+          "type": "object",
+          "default": {
+            "path": "/health",
+            "port": "http"
+          }
+        },
+        "initialDelaySeconds": {
+          "default": 3,
+          "title": "initialDelaySeconds",
+          "type": "integer"
+        }
+      },
+      "title": "readinessProbe",
+      "type": "object"
+    },
+    "replicaCount": {
+      "default": 1,
+      "title": "replicaCount",
+      "type": "integer"
+    },
+    "resources": {
+      "additionalProperties": false,
+      "title": "resources",
+      "type": "object"
+    },
+    "securityContext": {
+      "additionalProperties": false,
+      "description": "Specifies whether a specific priorityClassName should be used\npriorityClassName: \"\"",
+      "properties": {
+        "allowPrivilegeEscalation": {
+          "default": false,
+          "title": "allowPrivilegeEscalation",
+          "type": "boolean"
+        },
+        "capabilities": {
+          "additionalProperties": false,
+          "properties": {
+            "drop": {
+              "items": {
+                "type": "string"
+              },
+              "title": "drop",
+              "type": "array",
+              "default": [
+                "ALL"
+              ]
+            }
+          },
+          "title": "capabilities",
+          "type": "object",
+          "default": {
+            "drop": [
+              "ALL"
+            ]
+          }
+        },
+        "privileged": {
+          "default": false,
+          "title": "privileged",
+          "type": "boolean"
+        },
+        "readOnlyRootFilesystem": {
+          "default": true,
+          "title": "readOnlyRootFilesystem",
+          "type": "boolean"
+        },
+        "runAsNonRoot": {
+          "default": true,
+          "title": "runAsNonRoot",
+          "type": "boolean"
+        },
+        "runAsUser": {
+          "default": 100,
+          "title": "runAsUser",
+          "type": "integer"
+        },
+        "seccompProfile": {
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "default": "RuntimeDefault",
+              "title": "type",
+              "type": "string"
+            }
+          },
+          "title": "seccompProfile",
+          "type": "object",
+          "default": {
+            "type": "RuntimeDefault"
+          }
+        }
+      },
+      "title": "securityContext",
+      "type": "object"
+    },
+    "service": {
+      "additionalProperties": false,
+      "description": "Service configuration for exposing Flipt. Reference: http://kubernetes.io/docs/user-guide/services/",
+      "properties": {
+        "annotations": {
+          "additionalProperties": false,
+          "description": "Service annotations (can be templated)",
+          "title": "annotations",
+          "type": "object",
+          "default": {}
+        },
+        "enabled": {
+          "default": true,
+          "description": "Enable the Flipt service",
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "grpcPort": {
+          "default": 9000,
+          "description": "GRPC service port",
+          "title": "grpcPort",
+          "type": "integer"
+        },
+        "httpPort": {
+          "default": 8080,
+          "description": "HTTP service port",
+          "title": "httpPort",
+          "type": "integer"
+        },
+        "httpsPort": {
+          "default": 443,
+          "title": "httpsPort",
+          "type": "integer"
+        },
+        "labels": {
+          "additionalProperties": false,
+          "title": "labels",
+          "type": "object",
+          "default": {}
+        },
+        "type": {
+          "default": "ClusterIP",
+          "title": "type",
+          "type": "string"
+        }
+      },
+      "title": "service",
+      "type": "object"
+    },
+    "serviceAccount": {
+      "additionalProperties": false,
+      "properties": {
+        "annotations": {
+          "additionalProperties": false,
+          "description": "Annotations to add to the service account",
+          "title": "annotations",
+          "type": "object",
+          "default": {}
+        },
+        "create": {
+          "default": true,
+          "description": "Specifies whether a service account should be created",
+          "title": "create",
+          "type": "boolean"
+        },
+        "name": {
+          "default": "",
+          "description": "The name of the service account to use.\nIf not set and create is true, a name is generated using the fullname template",
+          "title": "name",
+          "type": "string"
+        }
+      },
+      "title": "serviceAccount",
+      "type": "object"
+    },
+    "ssh": {
+      "additionalProperties": false,
+      "description": "ssh contains some SSH specific configuration parameters",
+      "properties": {
+        "knownHosts": {
+          "default": "",
+          "description": "knownHosts is the contents of a custom known hosts file\nfor use with SSH authentication and the Git backend for Flipt",
+          "title": "knownHosts",
+          "type": "string"
+        }
+      },
+      "title": "ssh",
+      "type": "object"
+    },
+    "strategy": {
+      "additionalProperties": false,
+      "title": "strategy",
+      "type": "object"
+    },
+    "test": {
+      "default": null,
+      "title": "test",
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "tolerations": {
+      "items": {},
+      "title": "tolerations",
+      "type": "array",
+      "default": []
+    },
+    "topologySpreadConstraints": {
+      "items": {},
+      "title": "topologySpreadConstraints",
+      "type": "array",
+      "default": []
+    }
+  },
+  "type": "object"
+}

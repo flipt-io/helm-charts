@@ -301,7 +301,7 @@
               "type": "string"
             },
             "labels": {
-              "additionalProperties": true,,
+              "additionalProperties": true,
               "description": "Additional ServiceMonitor labels",
               "title": "labels",
               "type": "object",

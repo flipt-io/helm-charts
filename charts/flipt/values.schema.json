@@ -61,13 +61,13 @@
       "type": "object"
     },
     "deploymentAnnotations": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "description": "Additional annotations for the deployment",
       "title": "deploymentAnnotations",
       "type": "object"
     },
     "deploymentLabels": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "description": "Additional labels for the deployment",
       "title": "deploymentLabels",
       "type": "object"
@@ -188,7 +188,7 @@
       "additionalProperties": false,
       "properties": {
         "annotations": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "title": "annotations",
           "type": "object",
           "default": {}
@@ -276,7 +276,7 @@
           "additionalProperties": false,
           "properties": {
             "annotations": {
-              "additionalProperties": false,
+              "additionalProperties": true,
               "description": "ServiceMonitor annotations",
               "title": "annotations",
               "type": "object",
@@ -301,14 +301,14 @@
               "type": "string"
             },
             "labels": {
-              "additionalProperties": false,
+              "additionalProperties": true,
               "description": "Additional ServiceMonitor labels",
               "title": "labels",
               "type": "object",
               "default": {}
             },
             "namespaceSelector": {
-              "additionalProperties": false,
+              "additionalProperties": true,
               "description": "Namespace selector for ServiceMonitor resources",
               "title": "namespaceSelector",
               "type": "object",
@@ -394,7 +394,7 @@
       "type": "string"
     },
     "nodeSelector": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "title": "nodeSelector",
       "type": "object"
     },
@@ -431,7 +431,7 @@
           ]
         },
         "annotations": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "description": "Additional custom annotations for the PVC",
           "title": "annotations",
           "type": "object",
@@ -472,13 +472,13 @@
       "type": "object"
     },
     "podAnnotations": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "description": "Can pin the version of busybox to a specific version\ntag: '1.36.1'",
       "title": "podAnnotations",
       "type": "object"
     },
     "podLabels": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "title": "podLabels",
       "type": "object"
     },
@@ -622,7 +622,7 @@
       "description": "Service configuration for exposing Flipt. Reference: http://kubernetes.io/docs/user-guide/services/",
       "properties": {
         "annotations": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "description": "Service annotations (can be templated)",
           "title": "annotations",
           "type": "object",
@@ -653,7 +653,7 @@
           "type": "integer"
         },
         "labels": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "description": "Additional labels for the service",
           "title": "labels",
           "type": "object",
@@ -673,7 +673,7 @@
       "additionalProperties": false,
       "properties": {
         "annotations": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "description": "Annotations to add to the service account",
           "title": "annotations",
           "type": "object",

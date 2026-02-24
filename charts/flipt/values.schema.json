@@ -1,14 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "additionalProperties": false,
+  "additionalProperties": true,
   "properties": {
     "affinity": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "title": "affinity",
       "type": "object"
     },
     "autoscaling": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "enabled": {
           "default": false,
@@ -28,6 +28,11 @@
         "targetCPUUtilizationPercentage": {
           "default": 80,
           "title": "targetCPUUtilizationPercentage",
+          "type": "integer"
+        },
+        "targetMemoryUtilizationPercentage": {
+          "default": 80,
+          "title": "targetMemoryUtilizationPercentage",
           "type": "integer"
         }
       },
@@ -94,7 +99,7 @@
       "default": []
     },
     "flipt": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "args": {
           "items": {},
@@ -140,17 +145,16 @@
       "type": "string"
     },
     "global": {
+      "additionalProperties": true,
       "description": "Global values are values that can be accessed from any chart or subchart by exactly the same name.",
       "title": "global",
       "type": "object"
     },
     "image": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "command": {
-          "default": [
-            "/flipt"
-          ],
+          "default": ["/flipt"],
           "description": "Command to run in the container",
           "items": {
             "type": "string"
@@ -185,7 +189,7 @@
       "default": []
     },
     "ingress": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "annotations": {
           "additionalProperties": true,
@@ -206,6 +210,46 @@
         "hosts": {
           "description": "List of ingress hosts",
           "items": {
+            "additionalProperties": true,
+            "properties": {
+              "host": {
+                "title": "host",
+                "type": "string"
+              },
+              "paths": {
+                "items": {
+                  "additionalProperties": true,
+                  "properties": {
+                    "backend": {
+                      "additionalProperties": true,
+                      "properties": {
+                        "serviceName": {
+                          "title": "serviceName",
+                          "type": "string"
+                        },
+                        "servicePort": {
+                          "title": "servicePort",
+                          "type": "string"
+                        }
+                      },
+                      "title": "backend",
+                      "type": "object"
+                    },
+                    "path": {
+                      "title": "path",
+                      "type": "string"
+                    },
+                    "pathType": {
+                      "title": "pathType",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "title": "paths",
+                "type": "array"
+              }
+            },
             "type": "object"
           },
           "title": "hosts",
@@ -236,11 +280,23 @@
       "title": "ingress",
       "type": "object"
     },
+    "kubeVersionOverride": {
+      "title": "kubeVersionOverride",
+      "type": "string"
+    },
     "livenessProbe": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
+        "exec": {
+          "title": "exec",
+          "type": "object"
+        },
+        "failureThreshold": {
+          "title": "failureThreshold",
+          "type": "integer"
+        },
         "httpGet": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "properties": {
             "path": {
               "default": "/health",
@@ -264,16 +320,32 @@
           "default": 3,
           "title": "initialDelaySeconds",
           "type": "integer"
+        },
+        "periodSeconds": {
+          "title": "periodSeconds",
+          "type": "integer"
+        },
+        "successThreshold": {
+          "title": "successThreshold",
+          "type": "integer"
+        },
+        "tcpSocket": {
+          "title": "tcpSocket",
+          "type": "object"
+        },
+        "timeoutSeconds": {
+          "title": "timeoutSeconds",
+          "type": "integer"
         }
       },
       "title": "livenessProbe",
       "type": "object"
     },
     "metrics": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "serviceMonitor": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "properties": {
             "annotations": {
               "additionalProperties": true,
@@ -287,6 +359,11 @@
               "description": "If enabled, ServiceMonitor resources for Prometheus Operator are created",
               "title": "enabled",
               "type": "boolean"
+            },
+            "endpoint": {
+              "additionalProperties": true,
+              "title": "endpoint",
+              "type": "object"
             },
             "honorLabels": {
               "default": false,
@@ -334,16 +411,25 @@
               "type": "string"
             },
             "scrapeTimeout": {
-              "default": "null",
               "description": "ServiceMonitor scrape timeout in Go duration format (e.g. 15s)",
               "title": "scrapeTimeout",
-              "type": "null"
+              "type": ["string", "null"]
+            },
+            "sampleLimit": {
+              "title": "sampleLimit",
+              "type": "integer"
+            },
+            "targetLabels": {
+              "items": {
+                "type": "string"
+              },
+              "title": "targetLabels",
+              "type": "array"
             },
             "tlsConfig": {
-              "default": "null",
-              "description": "ServiceMonitor will use these tlsConfig settings to make the health check requests",
+              "additionalProperties": true,
               "title": "tlsConfig",
-              "type": "null"
+              "type": ["object", "null"]
             }
           },
           "title": "serviceMonitor",
@@ -365,7 +451,7 @@
       "type": "object"
     },
     "migration": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "deadLine": {
           "default": 600,
@@ -399,7 +485,7 @@
       "type": "object"
     },
     "pdb": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "enabled": {
           "default": false,
@@ -410,13 +496,22 @@
           "default": "25%",
           "title": "maxUnavailable",
           "type": "string"
+        },
+        "minAvailable": {
+          "title": "minAvailable",
+          "type": "integer"
+        },
+        "selector": {
+          "additionalProperties": true,
+          "title": "selector",
+          "type": "object"
         }
       },
       "title": "pdb",
       "type": "object"
     },
     "persistence": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "description": "Persistence configuration for Flipt data storage. Reference: https://kubernetes.io/docs/user-guide/persistent-volumes/",
       "properties": {
         "accessModes": {
@@ -426,9 +521,7 @@
           },
           "title": "accessModes",
           "type": "array",
-          "default": [
-            "ReadWriteOnce"
-          ]
+          "default": ["ReadWriteOnce"]
         },
         "annotations": {
           "additionalProperties": true,
@@ -436,6 +529,12 @@
           "title": "annotations",
           "type": "object",
           "default": {}
+        },
+        "dataSource": {
+          "additionalProperties": true,
+          "description": "DataSource to use for the PVC",
+          "title": "dataSource",
+          "type": "object"
         },
         "enabled": {
           "default": false,
@@ -448,6 +547,12 @@
           "description": "Name of an existing PVC to use for persistence",
           "title": "existingClaim",
           "type": "string"
+        },
+        "selector": {
+          "additionalProperties": true,
+          "description": "Label selector for the PVC",
+          "title": "selector",
+          "type": "object"
         },
         "size": {
           "default": "5Gi",
@@ -466,6 +571,11 @@
           "description": "Sub path within the volume to mount for persistence",
           "title": "subPath",
           "type": "string"
+        },
+        "volumeMode": {
+          "description": "Volume mode for the PVC (Filesystem or Block)",
+          "title": "volumeMode",
+          "type": "string"
         }
       },
       "title": "persistence",
@@ -483,7 +593,7 @@
       "type": "object"
     },
     "podSecurityContext": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "fsGroup": {
           "default": 1000,
@@ -499,16 +609,70 @@
           "default": 100,
           "title": "runAsUser",
           "type": "integer"
+        },
+        "seLinuxOptions": {
+          "additionalProperties": true,
+          "title": "seLinuxOptions",
+          "type": "object"
+        },
+        "seccompProfile": {
+          "additionalProperties": true,
+          "properties": {
+            "type": {
+              "default": "RuntimeDefault",
+              "title": "type",
+              "type": "string"
+            }
+          },
+          "title": "seccompProfile",
+          "type": "object",
+          "default": {
+            "type": "RuntimeDefault"
+          }
+        },
+        "supplementalGroups": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "supplementalGroups",
+          "type": "array"
+        },
+        "sysctls": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "sysctls",
+          "type": "array"
+        },
+        "windowsOptions": {
+          "additionalProperties": true,
+          "title": "windowsOptions",
+          "type": "object"
         }
       },
       "title": "podSecurityContext",
       "type": "object"
     },
+    "priorityClassName": {
+      "default": "",
+      "description": "Priority class name for the pod",
+      "title": "priorityClassName",
+      "type": "string"
+    },
     "readinessProbe": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
+        "exec": {
+          "title": "exec",
+          "type": "object"
+        },
+        "failureThreshold": {
+          "title": "failureThreshold",
+          "type": "integer"
+        },
         "httpGet": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "properties": {
             "path": {
               "default": "/health",
@@ -528,9 +692,29 @@
             "port": "http"
           }
         },
+        "grpc": {
+          "title": "grpc",
+          "type": "integer"
+        },
         "initialDelaySeconds": {
           "default": 3,
           "title": "initialDelaySeconds",
+          "type": "integer"
+        },
+        "periodSeconds": {
+          "title": "periodSeconds",
+          "type": "integer"
+        },
+        "successThreshold": {
+          "title": "successThreshold",
+          "type": "integer"
+        },
+        "tcpSocket": {
+          "title": "tcpSocket",
+          "type": "object"
+        },
+        "timeoutSeconds": {
+          "title": "timeoutSeconds",
           "type": "integer"
         }
       },
@@ -543,12 +727,24 @@
       "type": "integer"
     },
     "resources": {
-      "additionalProperties": false,
+      "additionalProperties": true,
+      "properties": {
+        "limits": {
+          "additionalProperties": true,
+          "title": "limits",
+          "type": "object"
+        },
+        "requests": {
+          "additionalProperties": true,
+          "title": "requests",
+          "type": "object"
+        }
+      },
       "title": "resources",
       "type": "object"
     },
     "securityContext": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "description": "Specifies whether a specific priorityClassName should be used\npriorityClassName: \"\"",
       "properties": {
         "allowPrivilegeEscalation": {
@@ -557,25 +753,28 @@
           "type": "boolean"
         },
         "capabilities": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "properties": {
+            "add": {
+              "items": {
+                "type": "string"
+              },
+              "title": "add",
+              "type": "array"
+            },
             "drop": {
               "items": {
                 "type": "string"
               },
               "title": "drop",
               "type": "array",
-              "default": [
-                "ALL"
-              ]
+              "default": ["ALL"]
             }
           },
           "title": "capabilities",
           "type": "object",
           "default": {
-            "drop": [
-              "ALL"
-            ]
+            "drop": ["ALL"]
           }
         },
         "privileged": {
@@ -599,7 +798,7 @@
           "type": "integer"
         },
         "seccompProfile": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "properties": {
             "type": {
               "default": "RuntimeDefault",
@@ -618,7 +817,7 @@
       "type": "object"
     },
     "service": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "description": "Service configuration for exposing Flipt. Reference: http://kubernetes.io/docs/user-guide/services/",
       "properties": {
         "annotations": {
@@ -628,11 +827,24 @@
           "type": "object",
           "default": {}
         },
+        "clusterIP": {
+          "description": "ClusterIP for the service",
+          "title": "clusterIP",
+          "type": "string"
+        },
         "enabled": {
           "default": true,
           "description": "Enable the Flipt service",
           "title": "enabled",
           "type": "boolean"
+        },
+        "externalIPs": {
+          "description": "External IPs for the service",
+          "items": {
+            "type": "string"
+          },
+          "title": "externalIPs",
+          "type": "array"
         },
         "grpcPort": {
           "default": 9000,
@@ -659,6 +871,19 @@
           "type": "object",
           "default": {}
         },
+        "loadBalancerIP": {
+          "description": "LoadBalancer IP",
+          "title": "loadBalancerIP",
+          "type": "string"
+        },
+        "loadBalancerSourceRanges": {
+          "description": "LoadBalancer source ranges",
+          "items": {
+            "type": "string"
+          },
+          "title": "loadBalancerSourceRanges",
+          "type": "array"
+        },
         "type": {
           "default": "ClusterIP",
           "description": "Kubernetes service type (ClusterIP, LoadBalancer, NodePort)",
@@ -670,7 +895,7 @@
       "type": "object"
     },
     "serviceAccount": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "annotations": {
           "additionalProperties": true,
@@ -696,7 +921,7 @@
       "type": "object"
     },
     "ssh": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "description": "ssh contains some SSH specific configuration parameters",
       "properties": {
         "knownHosts": {
@@ -710,17 +935,31 @@
       "type": "object"
     },
     "strategy": {
-      "additionalProperties": false,
+      "additionalProperties": true,
+      "properties": {
+        "type": {
+          "title": "type",
+          "type": "string"
+        },
+        "rollingUpdate": {
+          "additionalProperties": true,
+          "title": "rollingUpdate",
+          "type": "object"
+        }
+      },
       "title": "strategy",
       "type": "object"
     },
     "test": {
       "default": null,
+      "properties": {
+        "tag": {
+          "title": "tag",
+          "type": "string"
+        }
+      },
       "title": "test",
-      "type": [
-        "null",
-        "string"
-      ]
+      "type": ["null", "object", "string"]
     },
     "tolerations": {
       "items": {},

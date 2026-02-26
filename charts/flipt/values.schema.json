@@ -164,6 +164,7 @@
         },
         "pullPolicy": {
           "default": "IfNotPresent",
+          "enum": ["IfNotPresent", "Always", "Never"],
           "title": "pullPolicy",
           "type": "string"
         },
@@ -912,7 +913,7 @@
         },
         "name": {
           "default": "",
-          "description": "The name of the service account to use.\nIf not set and create is true, a name is generated using the fullname template",
+          "description": "The name of the service account to use. If not set and create is true, a name is generated using the fullname template",
           "title": "name",
           "type": "string"
         }
@@ -951,6 +952,7 @@
       "type": "object"
     },
     "test": {
+      "additionalProperties": false,
       "default": null,
       "properties": {
         "tag": {
@@ -959,7 +961,7 @@
         }
       },
       "title": "test",
-      "type": ["null", "object", "string"]
+      "type": ["null", "object"]
     },
     "tolerations": {
       "items": {},

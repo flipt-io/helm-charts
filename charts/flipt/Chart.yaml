@@ -3,7 +3,7 @@ name: flipt
 home: https://flipt.io
 description: Flipt is an open-source, self-hosted feature flag solution.
 type: application
-version: 0.87.4
+version: 0.87.5
 appVersion: v1.61.0
 maintainers:
   - name: Flipt

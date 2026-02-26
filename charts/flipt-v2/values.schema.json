@@ -1,14 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "additionalProperties": false,
+  "additionalProperties": true,
   "properties": {
     "affinity": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "title": "affinity",
       "type": "object"
     },
     "autoscaling": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "enabled": {
           "default": false,
@@ -28,6 +28,11 @@
         "targetCPUUtilizationPercentage": {
           "default": 80,
           "title": "targetCPUUtilizationPercentage",
+          "type": "integer"
+        },
+        "targetMemoryUtilizationPercentage": {
+          "default": 80,
+          "title": "targetMemoryUtilizationPercentage",
           "type": "integer"
         }
       },
@@ -58,6 +63,12 @@
         }
       },
       "title": "containerPorts",
+      "type": "object"
+    },
+    "commonAnnotations": {
+      "additionalProperties": true,
+      "description": "Common annotations to add to all resources",
+      "title": "commonAnnotations",
       "type": "object"
     },
     "deploymentAnnotations": {
@@ -92,7 +103,7 @@
       "default": []
     },
     "flipt": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "args": {
           "items": {},
@@ -112,6 +123,18 @@
           "title": "extraEnvVars",
           "type": "array",
           "default": []
+        },
+        "grpcPort": {
+          "default": 9000,
+          "description": "GRPC container port",
+          "title": "grpcPort",
+          "type": "integer"
+        },
+        "httpPort": {
+          "default": 8080,
+          "description": "HTTP container port",
+          "title": "httpPort",
+          "type": "integer"
         },
         "config": {
           "$ref": "https://raw.githubusercontent.com/flipt-io/flipt/refs/heads/v2/config/flipt.schema.json"
@@ -134,10 +157,7 @@
       "additionalProperties": false,
       "properties": {
         "command": {
-          "default": [
-            "/flipt",
-            "server"
-          ],
+          "default": ["/flipt", "server"],
           "description": "Command to run in the container",
           "items": {
             "type": "string"
@@ -172,7 +192,7 @@
       "default": []
     },
     "ingress": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "annotations": {
           "additionalProperties": true,
@@ -193,6 +213,7 @@
         "hosts": {
           "description": "kubernetes.io/ingress.class: nginx\nkubernetes.io/tls-acme: \"true\"",
           "items": {
+            "additionalProperties": true,
             "type": "object"
           },
           "title": "hosts",
@@ -214,7 +235,10 @@
           ]
         },
         "tls": {
-          "items": {},
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
           "title": "tls",
           "type": "array",
           "default": []
@@ -356,13 +380,30 @@
       "title": "minReadySeconds",
       "type": "integer"
     },
+    "migration": {
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "default": false,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "deadLine": {
+          "default": 100,
+          "title": "deadLine",
+          "type": "integer"
+        }
+      },
+      "title": "migration",
+      "type": "object"
+    },
     "nameOverride": {
       "default": "",
       "title": "nameOverride",
       "type": "string"
     },
     "nodeSelector": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "title": "nodeSelector",
       "type": "object"
     },
@@ -394,9 +435,7 @@
           },
           "title": "accessModes",
           "type": "array",
-          "default": [
-            "ReadWriteOnce"
-          ]
+          "default": ["ReadWriteOnce"]
         },
         "annotations": {
           "additionalProperties": true,
@@ -448,7 +487,7 @@
     },
     "podAnnotations": {
       "additionalProperties": true,
-      "description": "Can pin the version of busybox to a specific version\ntag: '1.36.1'",
+      "description": "Annotations to add to pods",
       "title": "podAnnotations",
       "type": "object"
     },
@@ -458,7 +497,7 @@
       "type": "object"
     },
     "podSecurityContext": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "fsGroup": {
           "default": 1000,
@@ -480,7 +519,7 @@
       "type": "object"
     },
     "readinessProbe": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "httpGet": {
           "additionalProperties": false,
@@ -512,19 +551,60 @@
       "title": "readinessProbe",
       "type": "object"
     },
+    "priorityClassName": {
+      "default": "",
+      "description": "Specifies whether a specific priorityClassName should be used",
+      "title": "priorityClassName",
+      "type": "string"
+    },
     "replicaCount": {
       "default": 1,
       "title": "replicaCount",
       "type": "integer"
     },
     "resources": {
-      "additionalProperties": false,
+      "additionalProperties": true,
+      "description": "Resources configuration for the container",
+      "properties": {
+        "limits": {
+          "additionalProperties": false,
+          "description": "Resource limits (e.g., cpu: 100m, memory: 128Mi)",
+          "properties": {
+            "cpu": {
+              "title": "cpu",
+              "type": "string"
+            },
+            "memory": {
+              "title": "memory",
+              "type": "string"
+            }
+          },
+          "title": "limits",
+          "type": "object"
+        },
+        "requests": {
+          "additionalProperties": false,
+          "description": "Resource requests (e.g., cpu: 100m, memory: 128Mi)",
+          "properties": {
+            "cpu": {
+              "title": "cpu",
+              "type": "string"
+            },
+            "memory": {
+              "title": "memory",
+              "type": "string"
+            }
+          },
+          "title": "requests",
+          "type": "object"
+        }
+      },
       "title": "resources",
       "type": "object"
     },
     "securityContext": {
-      "additionalProperties": false,
-      "description": "Specifies whether a specific priorityClassName should be used\npriorityClassName: \"\"",
+      "additionalProperties": true,
+      "description": "Security context for the pod",
       "properties": {
         "allowPrivilegeEscalation": {
           "default": false,
@@ -540,17 +620,13 @@
               },
               "title": "drop",
               "type": "array",
-              "default": [
-                "ALL"
-              ]
+              "default": ["ALL"]
             }
           },
           "title": "capabilities",
           "type": "object",
           "default": {
-            "drop": [
-              "ALL"
-            ]
+            "drop": ["ALL"]
           }
         },
         "privileged": {
@@ -593,7 +669,7 @@
       "type": "object"
     },
     "service": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "description": "Service configuration for exposing Flipt. Reference: http://kubernetes.io/docs/user-guide/services/",
       "properties": {
         "annotations": {
@@ -603,11 +679,23 @@
           "type": "object",
           "default": {}
         },
+        "clusterIP": {
+          "default": "",
+          "description": "ClusterIP for the service",
+          "title": "clusterIP",
+          "type": "string"
+        },
         "enabled": {
           "default": true,
           "description": "Enable the Flipt service",
           "title": "enabled",
           "type": "boolean"
+        },
+        "externalIPs": {
+          "items": {},
+          "title": "externalIPs",
+          "type": "array",
+          "default": []
         },
         "grpcPort": {
           "default": 9000,
@@ -631,6 +719,18 @@
           "title": "labels",
           "type": "object",
           "default": {}
+        },
+        "loadBalancerIP": {
+          "default": "",
+          "description": "LoadBalancer IP address",
+          "title": "loadBalancerIP",
+          "type": "string"
+        },
+        "loadBalancerSourceRanges": {
+          "items": {},
+          "title": "loadBalancerSourceRanges",
+          "type": "array",
+          "default": []
         },
         "type": {
           "default": "ClusterIP",
@@ -682,17 +782,14 @@
       "type": "object"
     },
     "strategy": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "title": "strategy",
       "type": "object"
     },
     "test": {
       "default": null,
       "title": "test",
-      "type": [
-        "null",
-        "string"
-      ]
+      "type": ["null", "string"]
     },
     "tolerations": {
       "items": {},
@@ -701,10 +798,10 @@
       "default": []
     },
     "topologySpreadConstraints": {
+      "additionalProperties": true,
       "items": {},
       "title": "topologySpreadConstraints",
-      "type": "array",
-      "default": []
+      "type": "array"
     }
   },
   "type": "object"

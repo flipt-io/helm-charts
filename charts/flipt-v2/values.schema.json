@@ -251,7 +251,7 @@
       "additionalProperties": false,
       "properties": {
         "httpGet": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "properties": {
             "path": {
               "default": "/health",
@@ -522,7 +522,7 @@
       "additionalProperties": true,
       "properties": {
         "httpGet": {
-          "additionalProperties": false,
+          "additionalProperties": true,
           "properties": {
             "path": {
               "default": "/health",

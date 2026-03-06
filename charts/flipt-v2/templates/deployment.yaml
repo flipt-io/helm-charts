@@ -68,6 +68,20 @@ spec:
               value: /home/flipt/.config/flipt
             - name: FLIPT_META_CHECK_FOR_UPDATES
               value: "0"
+            {{- if and .Values.existingSecrets .Values.existingSecrets.license .Values.existingSecrets.license.secretName }}
+            - name: FLIPT_LICENSE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.existingSecrets.license.secretName }}
+                  key: {{ .Values.existingSecrets.license.secretKey | default "key" }}
+            {{- end }}
+            {{- if and .Values.existingSecrets .Values.existingSecrets.gitCredentials .Values.existingSecrets.gitCredentials.secretName }}
+            - name: FLIPT_GIT_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.existingSecrets.gitCredentials.secretName }}
+                  key: {{ .Values.existingSecrets.gitCredentials.secretKey | default "access-token" }}
+            {{- end }}
             {{- if .Values.flipt.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.flipt.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

@@ -80,8 +80,7 @@ service:
 ingress:
   enabled: false
   className: ""
-  annotations:
-    {}
+  annotations: {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
@@ -102,8 +101,19 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources:
-  {}
+gateway:
+  enabled: false
+  className: ""
+  annotations: {}
+  http:
+    hosts: [flipt.local]
+  tls: []
+  #  - secretName: chart-example-tls
+  #    mode: Terminate
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
   # limits:
   #   cpu: 100m
   #   memory: 128Mi
@@ -256,7 +266,6 @@ flipt:
   #     gpg:
   #       private_key_path: ""
   #       password: ""
-
 
 metrics:
   serviceMonitor:

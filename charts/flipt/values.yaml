@@ -102,6 +102,18 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
+gateway:
+  enabled: false
+  className: ""
+  annotations: {}
+  http:
+    hosts: [flipt.local]
+  tls: []
+  #  - secretName: chart-example-tls
+  #    mode: Terminate
+  #    hosts:
+  #      - chart-example.local
+
 resources:
   {}
   # limits:

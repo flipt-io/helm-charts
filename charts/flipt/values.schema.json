@@ -280,6 +280,70 @@
       "title": "ingress",
       "type": "object"
     },
+    "gateway": {
+      "additionalProperties": true,
+      "properties": {
+        "annotations": {
+          "additionalProperties": true,
+          "title": "annotations",
+          "type": "object",
+          "default": {}
+        },
+        "className": {
+          "default": "",
+          "title": "className",
+          "type": "string"
+        },
+        "enabled": {
+          "default": false,
+          "title": "enabled",
+          "type": "boolean"
+        },
+        "http": {
+          "properties": {
+            "hosts": {
+              "items": {
+                "type": "string"
+              },
+              "title": "hosts",
+              "type": "array",
+              "default": ["flipt.local"]
+            }
+          },
+          "title": "http",
+          "type": "object"
+        },
+        "tls": {
+          "items": {
+            "properties": {
+              "hosts": {
+                "items": {
+                  "type": "string"
+                },
+                "title": "hosts",
+                "type": "array"
+              },
+              "mode": {
+                "default": "Terminate",
+                "title": "mode",
+                "type": "string"
+              },
+              "secretName": {
+                "title": "secretName",
+                "type": "string"
+              }
+            },
+            "required": ["secretName", "hosts"],
+            "type": "object"
+          },
+          "title": "tls",
+          "type": "array",
+          "default": []
+        }
+      },
+      "title": "gateway",
+      "type": "object"
+    },
     "kubeVersionOverride": {
       "title": "kubeVersionOverride",
       "type": "string"

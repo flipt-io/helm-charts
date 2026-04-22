@@ -1,6 +1,25 @@
 replicaCount: 1
 minReadySeconds: 0
 
+# -- Existing Kubernetes Secrets to use for sensitive configuration.
+# These allow you to manage secrets outside of Helm values (e.g. via
+# External Secrets Operator, Sealed Secrets, or kubectl create secret).
+# When set, the chart injects the secret values as environment variables
+# and configures Flipt to reference them via ${env:VAR_NAME} syntax.
+existingSecrets:
+  # -- License key from an existing Kubernetes Secret
+  license:
+    # -- Name of the existing Secret containing the license key
+    secretName: ""
+    # -- Key within the Secret that holds the license key
+    secretKey: "key"
+  # -- Git credentials from an existing Kubernetes Secret
+  gitCredentials:
+    # -- Name of the existing Secret containing git credentials
+    secretName: ""
+    # -- Key within the Secret that holds the access token
+    secretKey: "access-token"
+
 image:
   repository: docker.flipt.io/flipt/flipt
   pullPolicy: IfNotPresent

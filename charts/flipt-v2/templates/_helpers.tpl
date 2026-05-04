@@ -122,6 +122,14 @@ Deployment annotations
   {{- printf "checksum/config: %v" (join "," .Values.flipt | sha256sum) | nindent 0 -}}
 {{- end -}}
 
+{{/*
+Create the name for the headless service used by StatefulSet.
+Truncated to 63 chars to account for the appended "-headless" suffix.
+*/}}
+{{- define "flipt-v2.headlessName" -}}
+{{- printf "%s-headless" (include "flipt-v2.fullname" . | trunc 54 | trimSuffix "-") }}
+{{- end }}
+
 {{/* Return the target Kubernetes version */}}
 {{- define "flipt-v2.tools.kubeVersion" -}}
 {{- default .Capabilities.KubeVersion.Version .Values.kubeVersionOverride }}

@@ -809,6 +809,40 @@
       "items": {},
       "title": "topologySpreadConstraints",
       "type": "array"
+    },
+    "kind": {
+      "default": "Deployment",
+      "description": "Controls whether Flipt is deployed as a Deployment or StatefulSet.",
+      "enum": ["Deployment", "StatefulSet"],
+      "title": "kind",
+      "type": "string"
+    },
+    "podManagementPolicy": {
+      "default": "Parallel",
+      "description": "Pod management policy for StatefulSet. Only used when kind is StatefulSet.",
+      "enum": ["OrderedReady", "Parallel"],
+      "title": "podManagementPolicy",
+      "type": "string"
+    },
+    "persistentVolumeClaimRetentionPolicy": {
+      "additionalProperties": false,
+      "description": "Controls PVC lifecycle on StatefulSet deletion or scale-down. Only used when kind=StatefulSet.",
+      "title": "persistentVolumeClaimRetentionPolicy",
+      "type": "object",
+      "properties": {
+        "whenDeleted": {
+          "description": "What happens to PVCs when the StatefulSet is deleted.",
+          "enum": ["Retain", "Delete"],
+          "title": "whenDeleted",
+          "type": "string"
+        },
+        "whenScaled": {
+          "description": "What happens to PVCs when the StatefulSet is scaled down.",
+          "enum": ["Retain", "Delete"],
+          "title": "whenScaled",
+          "type": "string"
+        }
+      }
     }
   },
   "type": "object"

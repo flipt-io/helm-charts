@@ -1,0 +1,27 @@
+{{- if eq (lower .Values.kind) "statefulset" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "flipt-v2.headlessName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "flipt-v2.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+    - port: {{ .Values.service.httpPort }}
+      targetPort: http
+      protocol: TCP
+      name: http
+    - port: {{ .Values.service.httpsPort }}
+      targetPort: https
+      protocol: TCP
+      name: https
+    - port: {{ .Values.service.grpcPort }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+  selector:
+    {{- include "flipt-v2.selectorLabels" . | nindent 4 }}
+{{- end }}

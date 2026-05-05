@@ -1,6 +1,15 @@
 replicaCount: 1
 minReadySeconds: 0
 
+# kind controls whether Flipt is deployed as a Deployment or StatefulSet.
+# Use StatefulSet when stable network identities or volumeClaimTemplates are needed.
+# Allowed values: Deployment, StatefulSet
+kind: Deployment
+
+# podManagementPolicy is only used when kind is StatefulSet.
+# Allowed values: OrderedReady, Parallel
+podManagementPolicy: Parallel
+
 image:
   repository: docker.flipt.io/flipt/flipt
   pullPolicy: IfNotPresent
@@ -117,6 +126,9 @@ autoscaling:
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
+  # Note: HPA works with StatefulSet but scale-down does NOT delete PVCs created by
+  # volumeClaimTemplates. Set persistentVolumeClaimRetentionPolicy.whenScaled=Delete
+  # to avoid orphaned PVCs accumulating over time.
 
 pdb:
   enabled: false
@@ -125,8 +137,22 @@ pdb:
 nodeSelector: {}
 tolerations: []
 affinity: {}
+# strategy configures the rollout strategy.
+# For Deployments this maps to spec.strategy; for StatefulSets to spec.updateStrategy.
 strategy: {}
 topologySpreadConstraints: []
+
+# persistentVolumeClaimRetentionPolicy controls what happens to PVCs created by
+# volumeClaimTemplates when the StatefulSet is deleted or scaled down.
+# Only used when kind=StatefulSet.
+# whenDeleted: Retain|Delete — what to do with PVCs when the StatefulSet is deleted
+# whenScaled:  Retain|Delete — what to do with PVCs when the StatefulSet is scaled down
+# Note: if you enable HPA with kind=StatefulSet and leave whenScaled=Retain,
+#       orphaned PVCs will accumulate on scale-down.
+persistentVolumeClaimRetentionPolicy: {}
+# persistentVolumeClaimRetentionPolicy:
+#   whenDeleted: Retain
+#   whenScaled: Delete
 
 ## Container ports
 ##

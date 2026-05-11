@@ -248,7 +248,7 @@
       "type": "object"
     },
     "livenessProbe": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "httpGet": {
           "additionalProperties": true,

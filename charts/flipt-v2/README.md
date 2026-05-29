@@ -76,6 +76,7 @@ flipt:
 | `replicaCount`        | int    | `1`                             | Number of replicas                                                                   |
 | `image.repository`    | string | `"docker.flipt.io/flipt/flipt"` | Image repository                                                                     |
 | `image.tag`           | string | `""`                            | Image tag (defaults to chart appVersion)                                             |
+| `image.digest`        | string | `""`                            | Optional image digest (e.g. `sha256:...`); appended to the image as `@digest`        |
 | `service.type`        | string | `"ClusterIP"`                   | Kubernetes service type                                                              |
 | `service.httpPort`    | int    | `8080`                          | HTTP service port                                                                    |
 | `service.grpcPort`    | int    | `9000`                          | gRPC service port                                                                    |

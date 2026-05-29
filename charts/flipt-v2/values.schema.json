@@ -180,6 +180,12 @@
           "description": "Overrides the image tag whose default is the chart appVersion.",
           "title": "tag",
           "type": "string"
+        },
+        "digest": {
+          "default": "",
+          "description": "Optional image digest (e.g. sha256:abc123...). When set, it is appended to the image reference as `@digest` so the OCI runtime resolves by digest.",
+          "title": "digest",
+          "type": "string"
         }
       },
       "title": "image",

@@ -3,6 +3,20 @@ entries:
   flipt:
   - apiVersion: v2
     appVersion: v1.61.1
+    created: "2026-05-29T08:23:39.76852887Z"
+    description: Flipt is an open-source, self-hosted feature flag solution.
+    digest: 5ee5564f6e219c319d831312f2b59ddf4f53f7920b2c0b1c0b1fcf7a09f67aa3
+    home: https://flipt.io
+    maintainers:
+    - name: Flipt
+      url: https://github.com/flipt-io/helm-charts
+    name: flipt
+    type: application
+    urls:
+    - https://github.com/flipt-io/helm-charts/releases/download/flipt-0.87.7/flipt-0.87.7.tgz
+    version: 0.87.7
+  - apiVersion: v2
+    appVersion: v1.61.1
     created: "2026-03-06T19:20:55.144505521Z"
     description: Flipt is an open-source, self-hosted feature flag solution.
     digest: 09096f9a072905538784c2ab0992ff39403d581ca1775880da79ffc4c61f24b2
@@ -2336,6 +2350,30 @@ entries:
   flipt-v2:
   - apiVersion: v2
     appVersion: v2.9.0
+    created: "2026-05-29T08:23:39.936632523Z"
+    description: Flipt v2 is a Git-native, open-source feature flag solution with
+      enhanced authentication and multi-environment support.
+    digest: a2fa24b01ad2dda05ef2187e01941f51d66a42112578aaa167ce1e7c00bc780d
+    home: https://flipt.io
+    keywords:
+    - feature-flags
+    - flipt
+    - configuration
+    - git-native
+    - feature-management
+    maintainers:
+    - name: Flipt
+      url: https://github.com/flipt-io/helm-charts
+    name: flipt-v2
+    sources:
+    - https://github.com/flipt-io/flipt
+    - https://github.com/flipt-io/helm-charts
+    type: application
+    urls:
+    - https://github.com/flipt-io/helm-charts/releases/download/flipt-v2-2.9.3/flipt-v2-2.9.3.tgz
+    version: 2.9.3
+  - apiVersion: v2
+    appVersion: v2.9.0
     created: "2026-05-11T23:25:24.471596291Z"
     description: Flipt v2 is a Git-native, open-source feature flag solution with
       enhanced authentication and multi-environment support.
@@ -2934,4 +2972,4 @@ entries:
     urls:
     - https://github.com/flipt-io/helm-charts/releases/download/flipt-v2-2.0.0-beta/flipt-v2-2.0.0-beta.tgz
     version: 2.0.0-beta
-generated: "2026-05-11T23:25:24.472159882Z"
+generated: "2026-05-29T08:23:39.937187097Z"

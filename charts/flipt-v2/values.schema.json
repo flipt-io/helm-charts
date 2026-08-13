@@ -798,6 +798,10 @@
       "title": "test",
       "type": ["object", "null"],
       "properties": {
+        "repository": {
+          "default": "busybox",
+          "description": "the image repository to use for the test connection pod"
+        },
         "tag": {
           "default": "latest",
           "description": "the version of busybox to use"

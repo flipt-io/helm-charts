@@ -34,6 +34,9 @@ serviceAccount:
   name: ""
 
 test:
+  # Can override the image used by the test connection pod,
+  # e.g. to pull busybox from a private registry mirror
+  # repository: 'busybox'
   # Can pin the version of busybox to a specific version
   # tag: '1.36.1'
 

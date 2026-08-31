@@ -66,6 +66,32 @@ securityContext:
   seccompProfile:
     type: "RuntimeDefault"
 
+## initContainers run to completion before the flipt container starts. Useful for any
+## preparation flipt cannot do for itself, for example:
+##   - validating or repairing a persisted git clone before flipt tries to read it
+##   - refreshing SSH known_hosts, so a host key rotation upstream does not block
+##     every replica from starting
+##   - seeding the data volume from a backup, or correcting its ownership
+##   - waiting on a dependency to become reachable
+## Values here are templated, so they may reference other values.
+##
+initContainers: []
+
+## startupProbe gives a slow-starting instance time to come up before the liveness
+## probe is allowed to act. While it is running the liveness probe is suspended, so
+## a lengthy first-boot (e.g. cloning a large git repository over a slow link) cannot
+## be killed midway. Disabled by default; when unset, liveness applies from the start.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
+## startupProbe:
+##   httpGet:
+##     path: /health
+##     port: http
+##   periodSeconds: 10
+##   failureThreshold: 30
+##
+startupProbe: {}
+
 readinessProbe:
   httpGet:
     path: /health

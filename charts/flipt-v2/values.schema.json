@@ -853,6 +853,20 @@
           "type": "string"
         }
       }
+    },
+    "initContainers": {
+      "description": "initContainers is a list of init containers that run to completion before the flipt container starts. Values are templated.",
+      "items": {},
+      "title": "initContainers",
+      "type": "array",
+      "default": []
+    },
+    "startupProbe": {
+      "additionalProperties": true,
+      "description": "startupProbe suspends the liveness probe until the container has started, so a slow first boot is not killed midway. Disabled when empty.",
+      "title": "startupProbe",
+      "type": "object",
+      "default": {}
     }
   },
   "type": "object"

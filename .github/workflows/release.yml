@@ -22,6 +22,44 @@ jobs:
         run: |
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+      - name: Chart appVersion
+        id: chart
+        run: |
+          APPVERSIONV1=$(grep '^appVersion:' charts/flipt/Chart.yaml | awk '{print $2}' | tr -d '"'"'"'')
+          APPVERSIONV2=$(grep '^appVersion:' charts/flipt-v2/Chart.yaml | awk '{print $2}' | tr -d '"'"'"'')
+
+          if ! [[ "$APPVERSIONV1" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::appVersion::v1 '$APPVERSIONV1' doesn't look like a valid version (expected vX.Y.Z)"
+            exit 1
+          fi
+          if ! [[ "$APPVERSIONV2" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::appVersion::v2 '$APPVERSIONV2' doesn't look like a valid version (expected vX.Y.Z)"
+            exit 1
+          fi
+
+          echo "Resolved appVersion V1: $APPVERSIONV1"
+          echo "Resolved appVersion V2: $APPVERSIONV2"
+
+          echo "appVersionV1=$APPVERSIONV1" >> "$GITHUB_OUTPUT"
+          echo "appVersionV2=$APPVERSIONV2" >> "$GITHUB_OUTPUT"
+
+      - name: Inline Flipt config schema
+        run: |
+          V1_SCHEMA_URL="https://raw.githubusercontent.com/flipt-io/flipt/refs/tags/${{ steps.chart.outputs.appVersionV1 }}/config/flipt.schema.json"
+          V2_SCHEMA_URL="https://raw.githubusercontent.com/flipt-io/flipt/refs/tags/${{ steps.chart.outputs.appVersionV2 }}/config/flipt.schema.json"
+
+          curl -sL --fail "$V1_SCHEMA_URL" -o /tmp/fliptV1.schema.json
+          curl -sL --fail "$V2_SCHEMA_URL" -o /tmp/fliptV2.schema.json
+
+          jq --slurpfile schema /tmp/fliptV1.schema.json '.properties.flipt.properties.config = $schema[0]' \
+            charts/flipt/values.schema.json > charts/flipt/values.schema.json.tmp
+
+          mv charts/flipt/values.schema.json.tmp charts/flipt/values.schema.json
+
+          jq --slurpfile schema /tmp/fliptV2.schema.json '.properties.flipt.properties.config = $schema[0]' \
+            charts/flipt-v2/values.schema.json > charts/flipt-v2/values.schema.json.tmp
+
+          mv charts/flipt-v2/values.schema.json.tmp charts/flipt-v2/values.schema.json
 
       - name: Install Helm
         uses: azure/setup-helm@v4

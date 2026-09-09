@@ -51,7 +51,10 @@ jobs:
           curl -sL --fail "$V1_SCHEMA_URL" -o /tmp/fliptV1.schema.json
           curl -sL --fail "$V2_SCHEMA_URL" -o /tmp/fliptV2.schema.json
 
-          jq --slurpfile schema /tmp/fliptV1.schema.json '.properties.flipt.properties.config = $schema[0]' \
+          jq 'if has("id") then .["$id"] = .id | del(.id) else . end' \
+            /tmp/fliptV1.schema.json > /tmp/fliptV1.schema.modified.json
+
+          jq --slurpfile schema /tmp/fliptV1.schema.modified.json '.properties.flipt.properties.config = $schema[0]' \
             charts/flipt/values.schema.json > charts/flipt/values.schema.json.tmp
 
           mv charts/flipt/values.schema.json.tmp charts/flipt/values.schema.json

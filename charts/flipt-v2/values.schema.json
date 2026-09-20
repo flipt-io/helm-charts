@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
   "additionalProperties": true,
   "properties": {
     "affinity": {
@@ -180,6 +180,12 @@
           "description": "Overrides the image tag whose default is the chart appVersion.",
           "title": "tag",
           "type": "string"
+        },
+        "digest": {
+          "default": "",
+          "description": "Optional image digest (e.g. sha256:abc123...). When set, it is appended to the image reference as `@digest` so the OCI runtime resolves by digest.",
+          "title": "digest",
+          "type": "string"
         }
       },
       "title": "image",
@@ -309,7 +315,7 @@
       "type": "object"
     },
     "livenessProbe": {
-      "additionalProperties": false,
+      "additionalProperties": true,
       "properties": {
         "httpGet": {
           "additionalProperties": true,
@@ -853,6 +859,10 @@
       "title": "test",
       "type": ["object", "null"],
       "properties": {
+        "repository": {
+          "default": "busybox",
+          "description": "the image repository to use for the test connection pod"
+        },
         "tag": {
           "default": "latest",
           "description": "the version of busybox to use"
@@ -870,6 +880,54 @@
       "items": {},
       "title": "topologySpreadConstraints",
       "type": "array"
+    },
+    "kind": {
+      "default": "Deployment",
+      "description": "Controls whether Flipt is deployed as a Deployment or StatefulSet.",
+      "enum": ["Deployment", "StatefulSet"],
+      "title": "kind",
+      "type": "string"
+    },
+    "podManagementPolicy": {
+      "default": "Parallel",
+      "description": "Pod management policy for StatefulSet. Only used when kind is StatefulSet.",
+      "enum": ["OrderedReady", "Parallel"],
+      "title": "podManagementPolicy",
+      "type": "string"
+    },
+    "persistentVolumeClaimRetentionPolicy": {
+      "additionalProperties": false,
+      "description": "Controls PVC lifecycle on StatefulSet deletion or scale-down. Only used when kind=StatefulSet.",
+      "title": "persistentVolumeClaimRetentionPolicy",
+      "type": "object",
+      "properties": {
+        "whenDeleted": {
+          "description": "What happens to PVCs when the StatefulSet is deleted.",
+          "enum": ["Retain", "Delete"],
+          "title": "whenDeleted",
+          "type": "string"
+        },
+        "whenScaled": {
+          "description": "What happens to PVCs when the StatefulSet is scaled down.",
+          "enum": ["Retain", "Delete"],
+          "title": "whenScaled",
+          "type": "string"
+        }
+      }
+    },
+    "initContainers": {
+      "description": "initContainers is a list of init containers that run to completion before the flipt container starts. Values are templated.",
+      "items": {},
+      "title": "initContainers",
+      "type": "array",
+      "default": []
+    },
+    "startupProbe": {
+      "additionalProperties": true,
+      "description": "startupProbe suspends the liveness probe until the container has started, so a slow first boot is not killed midway. Disabled when empty.",
+      "title": "startupProbe",
+      "type": "object",
+      "default": {}
     }
   },
   "type": "object"

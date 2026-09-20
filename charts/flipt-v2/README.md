@@ -76,6 +76,7 @@ flipt:
 | `replicaCount`        | int    | `1`                             | Number of replicas                                                                   |
 | `image.repository`    | string | `"docker.flipt.io/flipt/flipt"` | Image repository                                                                     |
 | `image.tag`           | string | `""`                            | Image tag (defaults to chart appVersion)                                             |
+| `image.digest`        | string | `""`                            | Optional image digest (e.g. `sha256:...`); appended to the image as `@digest`        |
 | `service.type`        | string | `"ClusterIP"`                   | Kubernetes service type                                                              |
 | `service.httpPort`    | int    | `8080`                          | HTTP service port                                                                    |
 | `service.grpcPort`    | int    | `9000`                          | gRPC service port                                                                    |
@@ -85,6 +86,10 @@ flipt:
 | `autoscaling.enabled` | bool   | `false`                         | Enable horizontal pod autoscaling                                                    |
 | `flipt.config`        | object | `{}`                            | Flipt v2 configuration (see [docs](https://docs.flipt.io/v2/configuration/overview)) |
 | `flipt.extraEnvVars`  | array  | `[]`                            | Extra environment variables (must use FLIPT\_ prefix)                                |
+| `initContainers`      | array  | `[]`                            | Init containers run to completion before the flipt container starts                  |
+| `startupProbe`        | object | `{}`                            | Startup probe; suspends liveness until started, protecting a slow first boot         |
+| `test.repository`     | string | `"busybox"`                     | Image repository for the `helm test` connection pod                                  |
+| `test.tag`            | string | `"latest"`                      | Image tag for the `helm test` connection pod                                         |
 
 ## Differences from Flipt v1
 

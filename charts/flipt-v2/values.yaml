@@ -1,11 +1,23 @@
 replicaCount: 1
 minReadySeconds: 0
 
+# kind controls whether Flipt is deployed as a Deployment or StatefulSet.
+# Use StatefulSet when stable network identities or volumeClaimTemplates are needed.
+# Allowed values: Deployment, StatefulSet
+kind: Deployment
+
+# podManagementPolicy is only used when kind is StatefulSet.
+# Allowed values: OrderedReady, Parallel
+podManagementPolicy: Parallel
+
 image:
   repository: docker.flipt.io/flipt/flipt
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
+  # Optional image digest (e.g. sha256:abc123...). When set, it is appended to
+  # the image reference as `@digest` so the OCI runtime resolves by digest.
+  digest: ""
   command: ["/flipt", "server"]
 
 imagePullSecrets: []
@@ -22,6 +34,9 @@ serviceAccount:
   name: ""
 
 test:
+  # Can override the image used by the test connection pod,
+  # e.g. to pull busybox from a private registry mirror
+  # repository: 'busybox'
   # Can pin the version of busybox to a specific version
   # tag: '1.36.1'
 
@@ -50,6 +65,32 @@ securityContext:
   runAsUser: 100
   seccompProfile:
     type: "RuntimeDefault"
+
+## initContainers run to completion before the flipt container starts. Useful for any
+## preparation flipt cannot do for itself, for example:
+##   - validating or repairing a persisted git clone before flipt tries to read it
+##   - refreshing SSH known_hosts, so a host key rotation upstream does not block
+##     every replica from starting
+##   - seeding the data volume from a backup, or correcting its ownership
+##   - waiting on a dependency to become reachable
+## Values here are templated, so they may reference other values.
+##
+initContainers: []
+
+## startupProbe gives a slow-starting instance time to come up before the liveness
+## probe is allowed to act. While it is running the liveness probe is suspended, so
+## a lengthy first-boot (e.g. cloning a large git repository over a slow link) cannot
+## be killed midway. Disabled by default; when unset, liveness applies from the start.
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+##
+## startupProbe:
+##   httpGet:
+##     path: /health
+##     port: http
+##   periodSeconds: 10
+##   failureThreshold: 30
+##
+startupProbe: {}
 
 readinessProbe:
   httpGet:
@@ -127,6 +168,9 @@ autoscaling:
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
+  # Note: HPA works with StatefulSet but scale-down does NOT delete PVCs created by
+  # volumeClaimTemplates. Set persistentVolumeClaimRetentionPolicy.whenScaled=Delete
+  # to avoid orphaned PVCs accumulating over time.
 
 pdb:
   enabled: false
@@ -135,8 +179,22 @@ pdb:
 nodeSelector: {}
 tolerations: []
 affinity: {}
+# strategy configures the rollout strategy.
+# For Deployments this maps to spec.strategy; for StatefulSets to spec.updateStrategy.
 strategy: {}
 topologySpreadConstraints: []
+
+# persistentVolumeClaimRetentionPolicy controls what happens to PVCs created by
+# volumeClaimTemplates when the StatefulSet is deleted or scaled down.
+# Only used when kind=StatefulSet.
+# whenDeleted: Retain|Delete — what to do with PVCs when the StatefulSet is deleted
+# whenScaled:  Retain|Delete — what to do with PVCs when the StatefulSet is scaled down
+# Note: if you enable HPA with kind=StatefulSet and leave whenScaled=Retain,
+#       orphaned PVCs will accumulate on scale-down.
+persistentVolumeClaimRetentionPolicy: {}
+# persistentVolumeClaimRetentionPolicy:
+#   whenDeleted: Retain
+#   whenScaled: Delete
 
 ## Container ports
 ##

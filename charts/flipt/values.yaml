@@ -6,6 +6,9 @@ image:
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
+  # Optional image digest (e.g. sha256:abc123...). When set, it is appended to
+  # the image reference as `@digest` so the OCI runtime resolves by digest.
+  digest: ""
   command: ["/flipt"]
 
 imagePullSecrets: []

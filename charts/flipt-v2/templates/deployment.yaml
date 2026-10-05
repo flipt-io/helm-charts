@@ -167,11 +167,11 @@ spec:
         name: flipt-data
         {{- with .Values.persistence.labels }}
         labels:
-          {{- toYaml . | nindent 8 }}
+          {{- toYaml . | nindent 10 }}
         {{- end }}
         {{- with .Values.persistence.annotations }}
         annotations:
-          {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 8 }}
+          {{- include "common.tplvalues.render" ( dict "value" . "context" $ ) | nindent 10 }}
         {{- end }}
       spec:
         accessModes:

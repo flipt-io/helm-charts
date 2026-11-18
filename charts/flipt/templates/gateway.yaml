@@ -1,0 +1,67 @@
+{{- if and .Values.gateway.enabled (not .Values.ingress.enabled) -}}
+{{- $fullName := include "flipt.fullname" . -}}
+{{- $httpHosts := .Values.gateway.http.hosts | default (list) -}}
+{{- $tlsHosts := list -}}
+{{- if and .Values.gateway.tls (gt (len .Values.gateway.tls) 0) -}}
+{{- $tlsHosts = (index .Values.gateway.tls 0).hosts | default (list) -}}
+{{- end -}}
+{{- $allHosts := concat $httpHosts $tlsHosts | uniq -}}
+{{- if .Capabilities.APIVersions.Has "gateway.networking.k8s.io/v1" -}}
+# Gateway
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: {{ $fullName }}-gateway
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "flipt.labels" . | nindent 4 }}
+  {{- with .Values.gateway.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  gatewayClassName: {{ .Values.gateway.className }}
+  listeners:
+  {{- range $httpHosts }}
+  - name: http-{{ . | trunc 63 | trimSuffix "-" }}
+    protocol: HTTP
+    port: 80
+    hostname: {{ . | quote }}
+  {{- end }}
+  {{- range .Values.gateway.tls }}
+  {{- $current := . -}}
+  {{- range $current.hosts }}
+  - name: https-{{ . | trunc 63 | trimSuffix "-" }}
+    protocol: HTTPS
+    port: 443
+    hostname: {{ . | quote }}
+    tls:
+      mode: {{ $current.mode | default "Terminate" }}
+      certificateRefs:
+        - name: {{ $current.secretName }}
+  {{- end }}
+  {{- end }}
+---
+# HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ $fullName }}-http
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "flipt.labels" . | nindent 4 }}
+spec:
+  parentRefs:
+    - name: {{ $fullName }}-gateway
+      namespace: {{ .Release.Namespace }}
+  hostnames:
+  {{- range $allHosts }}
+    - {{ . | quote }}
+  {{- end }}
+  rules:
+    - backendRefs:
+        - name: {{ $fullName }}
+          port: {{ $.Values.service.httpPort }}
+
+{{- end }}
+{{- end }}
